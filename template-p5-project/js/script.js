@@ -22,15 +22,36 @@ function preload() {
 function setup() {
 createCanvas(500, 500);
 
-background(200, 200, 200);
+background(191, 255, 199);
 
-rectMode(CENTER);
-/**
- * rectMode is to determine the anchor point of the next rectangles in the code
- */
-rect(250, 250, 100, 100);
 
+ellipseMode(CORNER);
+noStroke();
+
+fill(127, 0, 200, 100);
+ellipse(250, 250, 100, 100);
+
+fill(137, 0, 210, 100);
+ellipse(250, 250, 80, 80);
+
+fill(137, 0, 220, 100);
 ellipse(250, 250, 60, 60);
+
+fill(137, 0, 230, 100);
+ellipse(250, 250, 40, 40);
+
+fill(137, 0, 240, 100);
+ellipse(250, 250, 20, 20);
+
+
+/**
+ * shapeMode is to determine the anchor point of the next rectangles in the code
+ * fill and shape mode come before the shape you're drawing
+ * noFill or noStroke also come bedfore and define the parameter for such shapes
+ */
+
+
+
 
 
 }
