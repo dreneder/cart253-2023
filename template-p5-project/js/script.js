@@ -22,26 +22,22 @@ function preload() {
 function setup() {
 createCanvas(500, 500);
 
+//set the background to mint
 background(191, 255, 199);
 
+//draw a flesh-coloured head
+fill(250, 200, 200);
+ellipse(250, 250, 200, 200);
 
-ellipseMode(CORNER);
-noStroke();
+//Draw the eyes
+fill(0, 0, 255);
+ellipse(200, 250, 30, 30);
+ellipse(300, 250, 30, 30);
 
-fill(127, 0, 200, 100);
-ellipse(250, 250, 100, 100);
+//draw mouth black
+strokeWeight(10);
+line(200, 300, 300, 300);
 
-fill(137, 0, 210, 100);
-ellipse(250, 250, 80, 80);
-
-fill(137, 0, 220, 100);
-ellipse(250, 250, 60, 60);
-
-fill(137, 0, 230, 100);
-ellipse(250, 250, 40, 40);
-
-fill(137, 0, 240, 100);
-ellipse(250, 250, 20, 20);
 
 
 /**
