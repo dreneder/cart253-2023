@@ -1,9 +1,9 @@
 /**
- * Title of Project
- * Author Name
+ * Drwaing experiments
+ * Andre Neder
  * 
- * This is a template. You must fill in the title, author, 
- * and this description to match your project!
+ * Experimenting with p5's drawing and color function
+ * currently draws a face
  */
 
 "use strict";
@@ -17,7 +17,7 @@ function preload() {
 
 
 /**
- * Description of setup
+ * draws a face
 */
 function setup() {
 createCanvas(500, 500);
