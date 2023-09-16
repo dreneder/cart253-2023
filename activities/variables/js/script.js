@@ -21,13 +21,18 @@ function preload() {
 
 
 let backgroundShade = 0;
-let circleX = 0;
-let circleY = 250;
-let circleSize = 200;
-//in programming, rather than subtracting values it might be better to use negative numbers
-let circleSpeed = 2;
-let circleAcceleration = 0.25;
 
+//in programming, rather than subtracting values it might be better to use negative numbers
+
+
+// making a javascript object, instead of using "=" you use ":" to define value and a "," to separate the values
+// the objects are a set of properties that can be defined as different variables and then used in the program
+let circle = {
+    x: 0,
+    y: 250,
+    size: 200,
+    speed: 2
+};
 
 function setup() {
 createCanvas(500, 500);
@@ -39,10 +44,7 @@ createCanvas(500, 500);
 
 
 function draw() {
-    
-
 background(backgroundShade);
-circleX += circleSpeed;
-circleSpeed = circleSpeed + circleAcceleration;
-ellipse(circleX, circleY, circleSize);
+circle.x = circle.x + circle.speed;
+ellipse(circle.x, circle.y, circle.size);
 }
