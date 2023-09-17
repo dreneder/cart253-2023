@@ -34,11 +34,11 @@ let backgroundShade = 0;
 // the objects are a set of properties that can be defined as different variables and then used in the program
 
 let circle = {
-    x: 250,
+    x: 0,
     y: 250,
     size: 100,
     speed: 1,
-    fill:0
+    fill:255
 }
 
 function setup() {
@@ -52,10 +52,10 @@ createCanvas(500, 500);
 
 function draw() {
 background(backgroundShade);
-circle.speed = random(-5, 5);
+// circle.speed = random(-5, 5);
 circle.x = circle.x + circle.speed;
 
-circle.size = random(10, 100);
+// circle.size = random(10, 100);
 // ellipse(circle.x, circle.y, circle.speed);
 // ellipse(circleX, circleY, circleSize)
 
@@ -70,8 +70,15 @@ circle.size = random(10, 100);
 // console.log(randomNumber);
 
 // this creates a random number for fill beteween 0 and 255
-circle.fill = random(0, 255);
+// circle.fill = random(0, 255);
 
+// the "map" function acquires a value (mouseX or Y) and then converts it to another value (0 to height or width) within the desired range (50 to 500)
+// circle.size = map(mouseY,0,height,50,500);
+
+// the constrain function does about the same as map but will stop within the range
+circle.x = constrain(circle.x, 0, width);
+
+circle.fill = map(circle.x, 0, width, 0, 255);
 fill(circle.fill);
 ellipse(circle.x, circle.y, circle.size);
 
