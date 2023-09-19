@@ -1,9 +1,8 @@
 /**
- * Title of Project
- * Author Name
+ * Day n Nite
+ * André
  * 
- * This is a template. You must fill in the title, author, 
- * and this description to match your project!
+ * The objective of my exercise is to compose a small city skyline where the sun and moon move
  */
 
 "use strict";
