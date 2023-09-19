@@ -39,6 +39,12 @@ let moon = {
     size: 150
 };
 // naming the moon phases as earth just because eclipse is too hard to type
+
+let earthMove= {
+    w: 0,
+    e: 0
+};
+
 let earth = {
     w: -75,
     n: -75,
@@ -72,20 +78,21 @@ function setup() {
 
 /**
  * Description of draw() = where the magic happens
+ * I tried to change one of my map functions to constrain to fit the exercise
+ * description but the code worked nicely the way it is
 */
 function draw() {
 
 // r values: day = 0; night = 68
 // g values: day = 178; night = 0
 
-push();
-translate(500, 700);
 
 
-angle = map(mouseX, 0, width, 0, 360);
+angle = map(mouseX, 0, width, 0, 180);
 
-bg.r = map(day.y2, -580, 580, 0, 68);
-bg.g = map(day.y2, -580, 580, 178, 0);
+bg.r = map(angle, 0, 180, 0, 68);
+bg.g = map(angle, 0, 180, 178, 0);
+
 
 
 background(bg.r, bg.g, bg.b);
@@ -98,6 +105,8 @@ background(bg.r, bg.g, bg.b);
 
 
  // sun rotation is based on a line shape (day)
+ push();
+ translate(500, 700);
  rotate(angle);
  noStroke();
  line(day.x1, day.y1, day.x2, day.y2);
@@ -107,14 +116,15 @@ background(bg.r, bg.g, bg.b);
  noStroke(); 
  fill(255, 166, 0);
  ellipse(sun.x, sun.y, sun.size);
-
+ pop();
  
  // the moon movement is the same as the sun, based on the opposed value
  moon.x = day.x + -500;
  moon.y = day.y + -700;
  
  
-
+ push();
+ translate(500, 700);
  rotate(angle);
  noStroke();
  line(night.x1, night.y1, night.x2, night.y2);
@@ -128,16 +138,17 @@ background(bg.r, bg.g, bg.b);
  // this is the moon phase movement
  earth.w = map(mouseY, 350, height, -75, 75, true);
  earth.e = map(mouseY, 350, 0, 75, -75, true)
+
  push();
  ellipseMode(CORNERS);
- fill(0);
+ fill(bg.r, bg.g, bg.b);
  
  ellipse(moon.x+earth.w, moon.y+earth.n, moon.x+earth.e, moon.y+earth.s);
  pop();
 
-
- 
  pop();
+ 
+ 
     
     
     //drawing the skyline, I listened to a podcast and actually had fun doing this, please don't judge me
@@ -145,7 +156,7 @@ background(bg.r, bg.g, bg.b);
     translate(0, 0);
 
     noStroke();
-    fill(100);
+    fill(50);
     beginShape();
     vertex(0, 700);
     vertex(0, 350);
@@ -214,7 +225,7 @@ background(bg.r, bg.g, bg.b);
    
     
 
-    pop();
+     pop();
  
     
     
