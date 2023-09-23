@@ -30,23 +30,23 @@ function draw() {
     
     circle.x = circle.x + circle.speed;
 
-    if (circle.x > width) {
-        circle.speed = -circle.speed;
-    }
+//     if (circle.x > width) {
+//         circle.speed = -circle.speed;
+//     }
 
-    if (circle.x < 0) {
-        circle.speed = -circle.speed;
-    }
-// possibilities here are >, <, >=, <=, and the followings   
-// use 3 "=" (===) if you want ot check wether two things are equal to each other
-// use "!==" means does not equal
+//     if (circle.x < 0) {
+//         circle.speed = -circle.speed;
+//     }
+// // possibilities here are >, <, >=, <=, and the followings   
+// // use 3 "=" (===) if you want ot check wether two things are equal to each other
+// // use "!==" means does not equal
 
-if (mouseY < height/2) {
-    fill(255, 0, 0);
-}
-if (mouseY > height/2) {
-    fill(0, 0, 255);
-}
+// if (mouseY < height/2) {
+//     fill(255, 0, 0);
+// }
+// if (mouseY > height/2) {
+//     fill(0, 0, 255);
+// }
 
 
     ellipse(circle.x,circle.y,circle.size);
