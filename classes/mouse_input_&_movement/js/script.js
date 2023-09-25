@@ -20,7 +20,7 @@ let circle = {
     vy: 0,
     ax: 0,
     ay: 0,
-    acceleration: 0.25,
+    acceleration: 1,
     maxSpeed: 5
 }
 
