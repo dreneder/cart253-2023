@@ -21,7 +21,8 @@ let speed = 0;
 let ram = {
     x: 0,
     y: 0,
-    size: 400,
+    sx: 400,
+    sy: 800,
     vx: 0,
     vy: 0,
     ax: 0,
@@ -81,11 +82,14 @@ function draw() {
     
     
     
- //calculate for hitting orange cone
+ //stopping the loop for hitting orange cone
  let d = dist(ram.x,ram.y,cone.x,cone.y);
- if (d < cone.size/2 + ram.size) {
+ if (d < cone.size/2 + ram.x/4) {
      noLoop();
  }
+ else if (d < cone.size/2 + ram.y/5*2) {
+    noLoop();
+}
     
  
     
@@ -130,7 +134,7 @@ function draw() {
     noStroke();
     fill(255);
     imageMode(CENTER);
-    image(ram.image,ram.x,ram.y,ram.size,ram.size*2);
+    image(ram.image,ram.x,ram.y,ram.sx,ram.sy);
     
     
 
