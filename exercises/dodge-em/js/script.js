@@ -21,8 +21,8 @@ let speed = 0;
 let ram = {
     x: 0,
     y: 0,
-    sx: 400,
-    sy: 800,
+    sx: 0,
+    sy: 0,
     vx: 0,
     vy: 0,
     ax: 0,
@@ -35,7 +35,7 @@ let ram = {
 let cone = {
     x: 0,
     y: 250,
-    size: 200,
+    size: 0,
     vx: 0,
     vy: 0,
     speed: 0,
@@ -57,6 +57,10 @@ let laneDiv = {
     speed: 0,
 };
 
+
+let coneCounter= 0;
+
+
 function setup() {
     //setting window size
     createCanvas(windowWidth,windowHeight);
@@ -71,6 +75,12 @@ function setup() {
     
     cone.x = random(0,width);
     
+
+    // DEFINING THE SIZE OF THINGS ACCORNDINGLY CAUSE MY SMART ASS MADE THIS ON A HUGE SCREEN
+    ram.sy = height/2;
+    ram.sx = ram.sy/2;
+
+    cone.size = height/8;
     
 }
 
@@ -80,18 +90,7 @@ function draw() {
     //setting the background
     background(bg);
     
-    
-    
- //stopping the loop for hitting orange cone
- let d = dist(ram.x,ram.y,cone.x,cone.y);
- if (d < cone.size/2 + ram.x/4) {
-     noLoop();
- }
- else if (d < cone.size/2 + ram.y/5*2) {
-    noLoop();
-}
-    
- 
+
     
     //defining lane animation loop
     if (laneDiv.y > -200) {
@@ -105,6 +104,7 @@ function draw() {
     else if (speed <= 0) {
         speed = 0;
     }
+
     
     // lane speed converted to general speed
    laneDiv.speed = speed;
@@ -154,8 +154,8 @@ function draw() {
         ram.x = ram.x + 5;
     }
     // still working on making 0 movement when both are pressed
-    else if(keyIsDown(RIGHT_ARROW)||(LEFT_ARROW)) {
-        ram.x = ram.x + 0;
+    else if(keyIsDown(RIGHT_ARROW)&& keyIsDown(LEFT_ARROW)) {
+        ram.x = ram.x;
     }
     
     // controlling the speed
@@ -165,14 +165,15 @@ function draw() {
     else if (keyIsDown(DOWN_ARROW)) {
         speed = speed + -0.1;
     }
-    // else () {
-    //     speed = speed + -0.05;
-    // }
+    else if (keyIsDown(UP_ARROW) === false) {
+        speed = speed + -0.05;
+    }
     
     // cone loop from Y
     if (cone.y > height) {
         cone.y = 0;
         cone.x = random(0,width);
+        coneCounter = coneCounter + 1;
     }
     
     
@@ -186,7 +187,37 @@ function draw() {
     ellipse(cone.x,cone.y,cone.size/3*2);
     fill(cone.fill.r,cone.fill.g,cone.fill.b);
     ellipse(cone.x,cone.y,cone.size/3);           
-    
+
+//test
+
+
+//stopping the loop for hitting orange cone
+
+if (ram.x - ram.sx /3 < cone.x + cone.size/2 &&
+    ram.x + ram.sx /3 > cone.x - cone.size/2 &&
+    ram.y - ram.sy /2 < cone.y + cone.size/2 &&
+    ram.y + ram.sy /2 > cone.y - cone.size/2
+)
+ {
+       // game over message
+       textSize(100);
+       textAlign(CENTER);
+       stroke(255,255,255);
+       fill(242,130,31);
+   text('YOU DID NOT DODGE', width/2, height/2);
+    noLoop();
+
+}
+
+   
+    // text counter
+    textSize(30);
+    textAlign(LEFT);
+    noStroke();
+    fill(242,130,31);
+text('Orange cones dodged: '+coneCounter, width/50, height/20);
+
+
     
 }
 
