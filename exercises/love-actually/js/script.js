@@ -2,25 +2,61 @@
  * What is love? (baby don't hurt me...)
  * André Neder
  * 
- * This is a template. You must fill in the title, author, 
- * and this description to match your project!
+ *So the objective here is lovely, it is tragic, but difinitely a classic. So you control the cirlcle Romeo and you
+ *must meet with Juliet to meet your destiny and you must do so without the Montagues and the Capulets finding out.
+ *When you meet Juliet you must take, hughh... poison! Just click the mouse button. 
+ *The Capulets are always following Juliet, while the Montagues are following Romeo
  */
 
 "use strict";
 
-/**
- * Description of preload
-*/
+// not using preload but will leave it here just in case
 function preload() {
 
 }
 
+let juliet = {
+    x: 0,
+    y: 0,
+    size: 100,
+    vx: 0,
+    vy: 0,
+    speed: 3
+};
 
-/**
- * Description of setup
-*/
+let romeo = {
+    x: undefined,
+    y: undefined,
+    size: 100,
+    vx: 0,
+    vy: 0,
+    speed: 3
+};
+
+let montag = {
+    x: 0,
+    y: 0,
+    size: 500,
+    vx: 0,
+    vy: 0,
+    speed: 3
+};
+
+let capulet = {
+    x: undefined,
+    y: undefined,
+    size: 500,
+    vx: 0,
+    vy: 0,
+    speed: 1
+};
+
+// setting up the canvas and a few initial parameters
 function setup() {
+    createCanvas(windowWidth,windowHeight);
 
+    capulet.x = random(0,width);
+    capulet.y = random(0,height);
 }
 
 
@@ -28,152 +64,26 @@ function setup() {
  * Description of draw()
 */
 function draw() {
-
-}
-
-let  circle1 = {
-    x: undefined,
-    y: 250,
-    size: 100,
-    vx: 0,
-    vy: 0,
-    speed: 3
-};
-
-let  circle2 = {
-    x: undefined,
-    y: 250,
-    size: 100,
-    vx: 0,
-    vy: 0,
-    speed: 3
-};
-
-let state = `title`; // can be: title, simulation, love or sadness
-
-
-function preload() {
-
-}
-
-
-
-function setup() {
-    createCanvas(500,500);
-
-    setupCircles();
-}
-
-function setupCircles() {
-        // position circles separated from one another
-        circle1.x = width/3;
-        circle2.x = 2 * width / 3;
-    
-        // start circles moving in a random direction
-        circle1.vx = random(-circle1.speed,circle1.speed);
-        circle1.vy = random(-circle1.speed,circle1.speed);
-        circle2.vx = random(-circle2.speed,circle2.speed);
-        circle2.vy = random(-circle2.speed,circle2.speed);
-    }
-
-
-function draw() {
     background(0);
 
-    if (state === `title`) {
-        title();
+   capulet.vx = capulet.speed;
+   capulet.vy = capulet.speed;
+    // move family
+    capulet.x = capulet.x + capulet.vx;
+    capulet.y = capulet.y + capulet.vy;
+
+    //bounce the family
+    if (capulet.x <= 0 || capulet.x >= width) {
+        capulet.vx = -capulet.vx;
     }
-    else if (state === `simulation`) {
-        simulation();  
-    }
-    else if (state === `love`) {
-        love();
-    }
-    else if (state === `sadness`) {
-        sadness();
+    if (capulet.y <= 0 || capulet.y >= height) {
+        capulet.vy = -capulet.vy;
     }
 
-}
 
-function title() {
-    push();
-    textSize(64);
-    fill(200,100,100);
-    textAlign(CENTER,CENTER);
-    text(`LOVE?`,width/2,height/2);
-    pop();
-}
 
-function simulation() {
-    move();
-    checkOffScreen();
-    checkOverlap();
-    display();
-}
-
-function love() {
-    push();
-    textSize(64);
-    fill(200,150,150);
-    textAlign(CENTER,CENTER);
-    text(`LOVE!`,width/2,height/2);
-    pop();
-}
-
-function sadness() {
-    push();
-    textSize(64);
-    fill(150,150,255);
-    textAlign(CENTER,CENTER);
-    text(`:(`,width/2,height/2);
-    pop();
-}
-
-function move() {
-    // move the circles
-    circle1.x = circle1.x + circle1.vx;
-    circle1.y = circle1.y + circle1.vy
-
-    circle2.x = circle2.x + circle2.vx;
-    circle2.y = circle2.y + circle2.vy;
-
-}
-
-function checkOffScreen() {
-     // check if the circles have gone offscreen
-     if (isOffscreen(circle1) || isOffscreen(circle2)) {
-        state = `sadness`;
-
-    }
-}
-
-function isOffscreen(circle) {
-    if (circle.x < 0 || circle.x > width || circle.y < 0 || circle.y > height) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-function checkOverlap() {
-     // check if the circles overlap
-     let d = dist(circle1.x,circle1.y,circle2.x,circle2.y);
-     if (d < circle1.size/2 + circle2.size/2) {
-        state = `love`;
-     }
-}
-
-function display() {
-
-    // display the circles
-    ellipse(circle1.x,circle1.y,circle1.size);
-    ellipse(circle2.x,circle2.y,circle2.size);
+    fill(255);
+    ellipse(capulet.x,capulet.y,capulet.size);
 }
 
 
-function mousePressed() {
-    if (state === `title`) {
-        state = `simulation`;
-    }
-}
