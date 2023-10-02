@@ -45,10 +45,10 @@ let montag = {
 let capulet = {
     x: undefined,
     y: undefined,
-    size: 500,
+    size: 400,
     vx: 0,
     vy: 0,
-    speed: 1
+    speed: 5
 };
 
 // setting up the canvas and a few initial parameters
@@ -57,22 +57,19 @@ function setup() {
 
     capulet.x = random(0,width);
     capulet.y = random(0,height);
+    
+    capulet.vx = random(-capulet.speed, capulet.speed);
+    capulet.vy = random(-capulet.speed, capulet.speed);
 }
 
-
-/**
- * Description of draw()
-*/
 function draw() {
     background(0);
 
-   capulet.vx = capulet.speed;
-   capulet.vy = capulet.speed;
     // move family
-    capulet.x = capulet.x + capulet.vx;
-    capulet.y = capulet.y + capulet.vy;
+    capulet.x += capulet.vx;
+    capulet.y += capulet.vy;
 
-    //bounce the family
+    // bounce the family
     if (capulet.x <= 0 || capulet.x >= width) {
         capulet.vx = -capulet.vx;
     }
@@ -80,10 +77,8 @@ function draw() {
         capulet.vy = -capulet.vy;
     }
 
-
-
     fill(255);
-    ellipse(capulet.x,capulet.y,capulet.size);
+    ellipse(capulet.x, capulet.y, capulet.size);
 }
 
 
