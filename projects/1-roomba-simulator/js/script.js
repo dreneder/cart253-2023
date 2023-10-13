@@ -48,18 +48,63 @@ let roomba = {
     speed: 0, // Start out not moving
     maxSpeed: 5, // Moving at 5 pixels per frame
     acceleration: 0.1, // How much velocity is gained when accelerating
-    braking: -0.5, // How much velocity is lost when breaking
-    drag: -0.1 // How much velocity is lost when neither accelerating nor braking
+    brake: -1 // instead of draging for long it stops the device almost imediately
   };
 
-  let obstacle = {
-    x: 150,
-    y: 150,
-    size: 50
+  // furn as in furniture
+  let furn1 = {
+    x: undefined,
+    y: undefined,
+    sx: undefined,
+    sy: undefined
+  }
+
+  let furn2 = {
+    x: undefined,
+    y: undefined,
+    sx: undefined,
+    sy: undefined
+  }
+
+  let furn3 = {
+    x: undefined,
+    y: undefined,
+    sx: undefined,
+    sy: undefined
+  }
+
+  let furn4 = {
+    x: undefined,
+    y: undefined,
+    sx: undefined,
+    sy: undefined
+  }
+
+  let furn5 = {
+    x: undefined,
+    y: undefined,
+    sx: undefined,
+    sy: undefined
+  }
+
+  let furn6 = {
+    x: undefined,
+    y: undefined,
+    sx: undefined,
+    sy: undefined
+  }
+
+  let furn7 = {
+    x: undefined,
+    y: undefined,
+    sx: undefined,
+    sy: undefined
   }
   
   function setup() {
-    createCanvas(600, 600);
+    createCanvas(1000, 1000);
+    furnitureSize();
+    furniturePosition();
   }
   
   function draw() {
@@ -68,7 +113,7 @@ let roomba = {
     handleInput();
     move();
     wrap();
-    wrapObstacle();
+    
     display();
   }
   
@@ -83,23 +128,24 @@ let roomba = {
     }
   
     if (keyIsDown(UP_ARROW)) {
-      // Accelerate forward if the UP ARROW is pressed
+      // Thrusts the roomba forward when UP ARROW is pressed
       roomba.speed += roomba.acceleration;
       roomba.speed = constrain(roomba.speed, 0, roomba.maxSpeed);
     }
-    // Brake if the DOWN ARROW is pressed
+    // reverses when down arrow is pressed
     else if (keyIsDown(DOWN_ARROW)) {
-      roomba.speed += roomba.braking;
-      roomba.speed = constrain(roomba.speed, 0, roomba.maxSpeed);
+      roomba.speed -= roomba.acceleration;
+      roomba.speed = constrain(roomba.speed, -roomba.maxSpeed/4, 0);
     }
     else {
-      // Apply drag if neither are pressed
-      roomba.speed += roomba.drag;
+      // reduces the device speed and stops it
+      roomba.speed += roomba.brake;
       roomba.speed = constrain(roomba.speed, 0, roomba.maxSpeed);
     }
   }
   
   function move() {
+    // function unchanged
     // The magical formula!
     let vx = roomba.speed * cos(roomba.angle);
     let vy = roomba.speed * sin(roomba.angle);
@@ -107,8 +153,10 @@ let roomba = {
     // Move the roomba with the calculated velocities
     roomba.x += vx;
     roomba.y += vy;
-  }
+
+    }
   
+  // function modified to limit the roomba's position within the canvas
   function wrap() {
     if (roomba.x >= width + -roomba.size/2) {
       roomba.x = width + -roomba.size/2;
@@ -151,6 +199,32 @@ let roomba = {
 }
   }
 
+  function furnitureSize() {
+    furn1.sx = random(100,300);
+    furn1.sy = random(100,300);
+  }
+
+  // this furniture will limit the position of the furniture to the borders of the canvas
+function furniturePosition() {
+    furn1.x = random(furn1.sx/2, width - furn1.sx/2);
+    furn1.y = random(furn1.sy/2, height - furn1.sy/2);
+
+    // // limit the furniture position to the canvas
+    // furn1.x = constrain(furn1.x, furn1.sx/2, width - furn1.sx/2);
+    // furn1.y = constrain(furn1.y, furn1.sy/2, height - furn1.sy/2);
+
+    // make the furniture stay close to the wall if the distance is smaller than the roomba
+    if (furn1.x + -furn1.sx/2 < 0 + roomba.size/2 + furn1.sx/2) {
+        furn1.x = furn1.sx/2;
+    } else if (furn1.x + furn1.sx/2 > width - roomba.size/2) {
+        furn1.x = width - furn1.sx/2;
+    }
+    if (furn1.y + -furn1.sy/2 < 0 + roomba.size/2 + furn1.sy/2) {
+        furn1.y = furn1.sy/2;
+    } else if (furn1.y + furn1.sy/2 > height - roomba.size/2) {
+        furn1.y = height + -furn1.sy/2;
+    }
+}
 
   
   function display() {
@@ -172,5 +246,5 @@ let roomba = {
 
     fill(255);
     rectMode(CENTER);
-    rect(obstacle.x,obstacle.y,obstacle.size,obstacle.size);
+    rect(furn1.x,furn1.y,furn1.sx,furn1.sy);
   }
