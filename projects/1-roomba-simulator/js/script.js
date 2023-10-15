@@ -102,7 +102,7 @@ let roomba = {
   }
   
   function setup() {
-    createCanvas(1000, 1000);
+    createCanvas(800, 800);
     furnitureSize();
     furniturePosition();
   }
@@ -214,16 +214,33 @@ function furniturePosition() {
     // furn1.y = constrain(furn1.y, furn1.sy/2, height - furn1.sy/2);
 
     // make the furniture stay close to the wall if the distance is smaller than the roomba
-    if (furn1.x + -furn1.sx/2 < 0 + roomba.size/2 + furn1.sx/2) {
-        furn1.x = furn1.sx/2;
-    } else if (furn1.x + furn1.sx/2 > width - roomba.size/2) {
-        furn1.x = width - furn1.sx/2;
+    // if (furn1.x + -furn1.sx/2 < 0 + roomba.size/2 + furn1.sx/2) {
+    //     furn1.x = furn1.sx/2;
+    // } else if (furn1.x + furn1.sx/2 > width - roomba.size/2) {
+    //     furn1.x = width - furn1.sx/2;
+    // }
+    // if (furn1.y + -furn1.sy/2 < 0 + roomba.size/2 + furn1.sy/2) {
+    //     furn1.y = furn1.sy/2;
+    // } else if (furn1.y + furn1.sy/2 > height - roomba.size/2) {
+    //     furn1.y = height + -furn1.sy/2;
+    // }
+
+    if (furn1.x < 0 + roomba.size/2 + furn1.sx/2) {
+      furn1.x = furn1.sx/2;
     }
-    if (furn1.y + -furn1.sy/2 < 0 + roomba.size/2 + furn1.sy/2) {
-        furn1.y = furn1.sy/2;
-    } else if (furn1.y + furn1.sy/2 > height - roomba.size/2) {
-        furn1.y = height + -furn1.sy/2;
+    else if (furn1.x > width + -roomba.size/2 + -furn1.sx/2) {
+      furn1.x = width;
     }
+    if (furn1.y < 0 + roomba.size/2 + furn1.sy/2) {
+      furn1.y = furn1.sy/2;
+    }
+    else if (furn1.y > height + -roomba.size/2 + -furn1.sy/2) {
+      furn1.y = height;
+    }
+
+    console.log("furn.x "+furn1.x+", furn.sx "+furn1.sx+", furn.y "+furn1.y+", furn.sy "+furn1.sy);
+
+
 }
 
   
