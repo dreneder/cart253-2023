@@ -206,37 +206,37 @@ let roomba = {
 
   // this furniture will limit the position of the furniture to the borders of the canvas
 function furniturePosition() {
-    furn1.x = random(furn1.sx/2, width - furn1.sx/2);
-    furn1.y = random(furn1.sy/2, height - furn1.sy/2);
+    furn1.x = random(-100,900);
+    furn1.y = random(-100,900);
 
     // // limit the furniture position to the canvas
     // furn1.x = constrain(furn1.x, furn1.sx/2, width - furn1.sx/2);
     // furn1.y = constrain(furn1.y, furn1.sy/2, height - furn1.sy/2);
 
     // make the furniture stay close to the wall if the distance is smaller than the roomba
-    // if (furn1.x + -furn1.sx/2 < 0 + roomba.size/2 + furn1.sx/2) {
-    //     furn1.x = furn1.sx/2;
-    // } else if (furn1.x + furn1.sx/2 > width - roomba.size/2) {
-    //     furn1.x = width - furn1.sx/2;
-    // }
-    // if (furn1.y + -furn1.sy/2 < 0 + roomba.size/2 + furn1.sy/2) {
-    //     furn1.y = furn1.sy/2;
-    // } else if (furn1.y + furn1.sy/2 > height - roomba.size/2) {
-    //     furn1.y = height + -furn1.sy/2;
-    // }
+    if (furn1.x + -furn1.sx/2 < 0 + 150 + furn1.sx/2) {
+        furn1.x = furn1.sx/2;
+    } else if (furn1.x + furn1.sx/2 > width - 150) {
+        furn1.x = width - furn1.sx/2;
+    }
+    if (furn1.y + -furn1.sy/2 < 0 + 150 + furn1.sy/2) {
+        furn1.y = furn1.sy/2;
+    } else if (furn1.y + furn1.sy/2 > height - 150) {
+        furn1.y = height + -furn1.sy/2;
+    }
 
-    if (furn1.x < 0 + roomba.size/2 + furn1.sx/2) {
-      furn1.x = furn1.sx/2;
-    }
-    else if (furn1.x > width + -roomba.size/2 + -furn1.sx/2) {
-      furn1.x = width;
-    }
-    if (furn1.y < 0 + roomba.size/2 + furn1.sy/2) {
-      furn1.y = furn1.sy/2;
-    }
-    else if (furn1.y > height + -roomba.size/2 + -furn1.sy/2) {
-      furn1.y = height;
-    }
+    // if (furn1.x < 0 + roomba.size/2 + furn1.sx/2) {
+    //   furn1.x = furn1.sx/2;
+    // }
+    // else if (furn1.x > width - roomba.size/2 - furn1.sx/2) {
+    //   furn1.x = width;
+    // }
+    // if (furn1.y < 0 + roomba.size/2 + furn1.sy/2) {
+    //   furn1.y = furn1.sy/2;
+    // }
+    // else if (furn1.y > height - roomba.size/2 - furn1.sy/2) {
+    //   furn1.y = height;
+    // }
 
     console.log("furn.x "+furn1.x+", furn.sx "+furn1.sx+", furn.y "+furn1.y+", furn.sy "+furn1.sy);
 
@@ -245,6 +245,15 @@ function furniturePosition() {
 
   
   function display() {
+
+    push();
+    noFill()
+    stroke(0,255,0, 100);
+    strokeWeight(150);
+    rectMode(CENTER);
+    rect(width/2,height/2,width-50,height-50);
+pop();
+
     push();
     noStroke();
     // Because we're going to represent rotation, we should translate
@@ -262,6 +271,8 @@ function furniturePosition() {
     pop();
 
     fill(255);
+    noStroke();
     rectMode(CENTER);
     rect(furn1.x,furn1.y,furn1.sx,furn1.sy);
+
   }
