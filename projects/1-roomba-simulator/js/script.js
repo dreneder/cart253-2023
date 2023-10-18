@@ -28,17 +28,13 @@
 // /**
 //  * Description of setup
 // */
-// function setup() {
 
-// }
 
 
 // /**
 //  * Description of draw()
 // */
-// function draw() {
 
-// }
 
 let roomba = {
     x: 300,
@@ -57,22 +53,29 @@ let roomba = {
     y: undefined,
     sx: undefined,
     sy: undefined
-  }
+  };
 
   let furn2 = {
     x: undefined,
     y: undefined,
     sx: undefined,
     sy: undefined
-  }
+  };
 
   let furn3 = {
     x: undefined,
     y: undefined,
     sx: undefined,
     sy: undefined
-  }
+  };
 
+let base = {
+  x: undefined,
+  y: undefined,
+  sx: 10,
+  sy: 90,
+  angle: 0
+};
 
   
 // I know I might be jumping the gun a bit and I haven't really understood arrays 100% but the code bellow 
@@ -85,14 +88,16 @@ let roomba = {
     createCanvas(800, 800);
     furnitureSize();
     furniturePosition();
+    basePosition();
   }
   
   function draw() {
     background(138, 69, 4);
-  
+    
     handleInput();
     move();
     wrap();
+    wrapObstacle();
     roombaTrail();
     display();
   }
@@ -155,27 +160,27 @@ let roomba = {
 
   function wrapObstacle() {
     
-    let dX = abs(roomba.x - obstacle.x);
-    let dY = abs(roomba.y - obstacle.y);
+    let dX = dist(roomba.x, furn1.x);
+    let dY = dist(roomba.y, furn1.y);
 
     // Check for collision with the obstacle
-    if (dX < (obstacle.size / 3 + roomba.size / 2) && dY < (obstacle.size / 3 + roomba.size / 2)) {
+    if (dX < (furn1.sx / 2 + roomba.size / 2) || dY < (furn1.sy / 2 + roomba.size / 2)) {
         // Revert roomba's position to previous coordinates to avoid collision
         roomba.x -= roomba.speed * cos(roomba.angle);
         roomba.y -= roomba.speed * sin(roomba.angle);
         
         // If roomba reaches obstacle, treat it as if it reached the canvas boundaries
-        if (roomba.x < roomba.size / 2) {
-            roomba.x = roomba.size / 2;
-        } else if (roomba.x > width - roomba.size / 2) {
-            roomba.x = width - roomba.size / 2;
+        if (roomba.x < furn1.x) {
+            roomba.x = furn1.x + -roomba.size/2 + -furn1.sx/2;
+        } else if (roomba.x > furn1.x) {
+            roomba.x = furn1.x + roomba.size/2 + furn1.sx/2;
         }
 
-        if (roomba.y < roomba.size / 2) {
-            roomba.y = roomba.size / 2;
-        } else if (roomba.y > height - roomba.size / 2) {
-            roomba.y = height - roomba.size / 2;
-        }
+        if (roomba.y < furn1.y) {
+          roomba.y = furn1.y + -roomba.size/2 + -furn1.sy/2;
+      } else if (roomba.y > furn1.y) {
+          roomba.y = furn1.y + roomba.size/2 + furn1.sy/2;
+      }
 }
   }
 
@@ -208,8 +213,33 @@ function furniturePosition() {
    
 
     console.log("furn.x "+furn1.x+", furn.sx "+furn1.sx+", furn.y "+furn1.y+", furn.sy "+furn1.sy);
+    
 
+}
 
+function basePosition() {
+    base.x = random(0, width);
+    base.y = random(0, height);
+
+    if (base.x <= width/2) {
+      base.x = 0 + roomba.size/2;
+      base.angle = PI;
+    }
+    else if (base.x > width/2) {
+      base.x = width + -roomba.size/2;
+      base.angle = 0;
+    }
+    // if (base.y <= height/2) {
+    //   base.y = 0;
+    //   base.angle = HALF_PI;
+    // }
+    // else if (base.y > height/2) {
+    //   base.y = height;
+    //   base.angle = PI+HALF_PI;
+    // }
+  
+
+    console.log("base.x "+base.x+", base.sx "+base.sx+", base.angle"+base.angle+", base.y "+base.y+", base.sy "+base.sy);
 }
 
   
@@ -261,10 +291,25 @@ function furniturePosition() {
     text('p5',0,0);
     pop();
 
+
+
+    push();
+    translate(base.x,base.y);
+    rotate(base.angle);
+    noStroke();
+    fill(255,0,0);
+    rect(base.x,base.y,base.sx,base.sy);
+    pop();
+
+
     fill(255);
     noStroke();
     rectMode(CENTER);
     rect(furn1.x,furn1.y,furn1.sx,furn1.sy);
+    
+
+ 
+
 
   }
 
@@ -279,25 +324,3 @@ function furniturePosition() {
 
 
 
-//   let img;
-
-// function preload() {
-//   img = loadImage('https://picsum.photos/200/300/?random');
-// }
-
-// function setup() {
-//   createCanvas(img.width, img.height);
-// }
-
-// function draw() {
-//   background(220);
-
-//   let pix = img.get(mouseX, mouseY);
-
-//   image(img, 0, 0);
-
-//   // using functions
-//   console.log(`red: ${red(pix)}, green: ${green(pix)}, blue: ${blue(pix)}, alpha: ${alpha(pix)}`);
-//   // array
-//   console.log(`red: ${pix[0]}, green: ${pix[1]}, blue: ${pix[2]}, alpha: ${pix[3]}`);
-// }
