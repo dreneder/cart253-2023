@@ -77,32 +77,40 @@ let base = {
   angle: 0
 };
 
-  
-// I know I might be jumping the gun a bit and I haven't really understood arrays 100% but the code bellow 
-// I followed from this video https://youtu.be/vqE8DMfOajk?si=Nv8zz-yXEpU59jjd I copied the parts I needed and
-// adapted to my code and it worked exaclty as I wanted
-  let trail = []; 
+const DIRT_AMOUNT = 5000;
+let dirts = [];
 
 
-  function setup() {
+
+function setup() {
     createCanvas(800, 800);
     furnitureSize();
     furniturePosition();
     basePosition();
+
+  for (let i = 0; i < DIRT_AMOUNT; i++) {
+      let dirt = {
+        x: random(0, width),
+        y: random(0, height),
+        size: 2
+      }
+      dirts.push(dirt);
+    }
+  
   }
   
-  function draw() {
+function draw() {
     background(138, 69, 4);
     
     handleInput();
     move();
     wrap();
     wrapObstacle();
-    roombaTrail();
+  
     display();
   }
   
-  function handleInput() {
+function handleInput() {
     if (keyIsDown(LEFT_ARROW)) {
       // Turn LEFT if the LEFT arrow is pressed
       roomba.angle -= 0.05;
@@ -129,8 +137,8 @@ let base = {
     }
   }
   
-  function move() {
-    // function unchanged
+function move() {
+    // function unchanged from polar coordinates tutorial
     // The magical formula!
     let vx = roomba.speed * cos(roomba.angle);
     let vy = roomba.speed * sin(roomba.angle);
@@ -142,7 +150,7 @@ let base = {
     }
   
   // function modified to limit the roomba's position within the canvas
-  function wrap() {
+function wrap() {
     if (roomba.x >= width + -roomba.size/2) {
       roomba.x = width + -roomba.size/2;
     }
@@ -158,31 +166,50 @@ let base = {
     }
   }
 
-  function wrapObstacle() {
-    
-    let dX = dist(roomba.x, furn1.x);
-    let dY = dist(roomba.y, furn1.y);
+function wrapObstacle() {
 
-    // Check for collision with the obstacle
-    if (dX < (furn1.sx / 2 + roomba.size / 2) || dY < (furn1.sy / 2 + roomba.size / 2)) {
-        // Revert roomba's position to previous coordinates to avoid collision
-        roomba.x -= roomba.speed * cos(roomba.angle);
-        roomba.y -= roomba.speed * sin(roomba.angle);
-        
-        // If roomba reaches obstacle, treat it as if it reached the canvas boundaries
-        if (roomba.x < furn1.x) {
-            roomba.x = furn1.x + -roomba.size/2 + -furn1.sx/2;
-        } else if (roomba.x > furn1.x) {
-            roomba.x = furn1.x + roomba.size/2 + furn1.sx/2;
-        }
+let dX = dist(roomba.x,furn1.x);
+let dY = dist(roomba.y,furn1.y);
 
-        if (roomba.y < furn1.y) {
-          roomba.y = furn1.y + -roomba.size/2 + -furn1.sy/2;
-      } else if (roomba.y > furn1.y) {
-          roomba.y = furn1.y + roomba.size/2 + furn1.sy/2;
-      }
-}
+  if (dX <= roomba.size/2 + furn1.sx/2 &&
+    roomba.x + roomba.size/2 >= furn1.x - furn1.sx/2 &&
+    roomba.y <= furn1.y + furn1.sy/2 &&
+    roomba.y >= furn1.y - furn1.sy/2
+    )
+    {
+    roomba.x = furn1.x + -roomba.size/2 + -furn1.sx/2;
   }
+  else if (dX <= roomba.size/2 + furn1.sx/2 &&
+  roomba.x + -roomba.size/2 <= furn1.x + furn1.sx/2 &&
+  roomba.y <= furn1.y + furn1.sy/2 &&
+  roomba.y >= furn1.y - furn1.sy/2
+  )
+  {
+  roomba.x = furn1.x + roomba.size/2 + furn1.sx/2;
+}
+
+if (dY <= roomba.size/2 + furn1.sy/2 &&
+roomba.y + roomba.size/2 >= furn1.y - furn1.sy/2 &&
+roomba.x <= furn1.x + furn1.sx/2 &&
+roomba.x >= furn1.x - furn1.sx/2
+)
+{
+roomba.y = furn1.y + -roomba.size/2 + -furn1.sy/2;
+}
+else if (dY <= roomba.size/2 + furn1.sy/2 &&
+roomba.y + -roomba.size/2 <= furn1.y + furn1.sy/2 &&
+roomba.x <= furn1.x + furn1.sx/2 &&
+roomba.x >= furn1.x - furn1.sx/2
+)
+{
+roomba.y = furn1.y + roomba.size/2 + furn1.sy/2;
+}
+
+
+      
+
+}
+  
 
   function furnitureSize() {
     furn1.sx = random(100,300);
@@ -218,17 +245,17 @@ function furniturePosition() {
 }
 
 function basePosition() {
-    base.x = random(0, width);
-    base.y = random(0, height);
+    // base.x = random(0, width);
+    // base.y = random(0, height);
 
-    if (base.x <= width/2) {
-      base.x = 0 + roomba.size/2;
-      base.angle = PI;
-    }
-    else if (base.x > width/2) {
-      base.x = width + -roomba.size/2;
-      base.angle = 0;
-    }
+    // if (base.x <= width/2) {
+    //   base.x = 0 + roomba.size/2;
+    //   base.angle = PI;
+    // }
+    // else if (base.x > width/2) {
+    //   base.x = width + -roomba.size/2;
+    //   base.angle = 0;
+    // }
     // if (base.y <= height/2) {
     //   base.y = 0;
     //   base.angle = HALF_PI;
@@ -245,17 +272,7 @@ function basePosition() {
   
   function display() {
 
-    // draw the trail after the roomba
-    push();
-      noFill();
-      strokeWeight(120);
-      stroke(150,150,0,150); // light yellow color
-      beginShape();
-      for (let i = 0; i < trail.length; i++) {
-          vertex(trail[i].x, trail[i].y);
-      }
-      endShape();
-        pop();
+   
 
     push();
     noFill()
@@ -307,20 +324,33 @@ function basePosition() {
     rectMode(CENTER);
     rect(furn1.x,furn1.y,furn1.sx,furn1.sy);
     
-
+  
+    for (let i = 0; i < dirts.length; i++) {
+      let dirt = dirts[i];
+      let d = dist(roomba.x, roomba.y, dirt.x, dirt.y);
+      if (d < dirt.size/2 + roomba.size/2) {
+        dirts.splice(i, 1);
+      }
+    }
+    
+    for (let i = 0; i < dirts.length; i++) {
+      let dirt = dirts[i];
+      noStroke();
+      fill(200, 180, 160);
+      ellipse(dirt.x, dirt.y, dirt.size);
+    }
+    
+    if (dirts.length === 0) {
+      console.log("You win!");
+    }
  
 
 
   }
 
 
-  function roombaTrail() {
-     // Add the current roomba position to the trail path
-     trail.push(createVector(roomba.x, roomba.y));
 
-    
 
-  }
 
 
 
