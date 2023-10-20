@@ -80,7 +80,7 @@ let base = {
 const DIRT_AMOUNT = 5000;
 let dirts = [];
 
-
+let hit = false;
 
 function setup() {
     createCanvas(800, 800);
@@ -108,6 +108,7 @@ function draw() {
     wrapObstacle();
   
     display();
+    
   }
   
 function handleInput() {
@@ -168,45 +169,46 @@ function wrap() {
 
 function wrapObstacle() {
 
-let dX = dist(roomba.x,furn1.x);
-let dY = dist(roomba.y,furn1.y);
+let dX = dist(roomba.x, 0, furn1.x, 0);
+let dY = dist(0, roomba.y, 0, furn1.y);
 
-  if (dX <= roomba.size/2 + furn1.sx/2 &&
-    roomba.x + roomba.size/2 >= furn1.x - furn1.sx/2 &&
-    roomba.y <= furn1.y + furn1.sy/2 &&
-    roomba.y >= furn1.y - furn1.sy/2
-    )
-    {
-    roomba.x = furn1.x + -roomba.size/2 + -furn1.sx/2;
-  }
-  else if (dX <= roomba.size/2 + furn1.sx/2 &&
-  roomba.x + -roomba.size/2 <= furn1.x + furn1.sx/2 &&
-  roomba.y <= furn1.y + furn1.sy/2 &&
-  roomba.y >= furn1.y - furn1.sy/2
-  )
-  {
-  roomba.x = furn1.x + roomba.size/2 + furn1.sx/2;
+if (dX <= roomba.size/2 + furn1.sx/2 &&
+roomba.x >= furn1.x - furn1.sx/2 - roomba.size/2 &&
+roomba.y <= furn1.y + furn1.sy/2 + roomba.size/2 &&
+roomba.y >= furn1.y - furn1.sy/2 - roomba.size/2
+)
+{
+roomba.x = furn1.x + -roomba.size/2 + -furn1.sx/2;
+}
+else if (dX <= roomba.size/2 + furn1.sx/2 &&
+roomba.x + -roomba.size/2 <= furn1.x + furn1.sx/2 &&
+roomba.y <= furn1.y + furn1.sy/2 + roomba.size/2 &&
+roomba.y >= furn1.y - furn1.sy/2 - roomba.size/2
+)
+{
+roomba.x = furn1.x + roomba.size/2 + furn1.sx/2;
 }
 
 if (dY <= roomba.size/2 + furn1.sy/2 &&
 roomba.y + roomba.size/2 >= furn1.y - furn1.sy/2 &&
-roomba.x <= furn1.x + furn1.sx/2 &&
-roomba.x >= furn1.x - furn1.sx/2
+roomba.x <= furn1.x + furn1.sx/2 + roomba.size/2 &&
+roomba.x >= furn1.x - furn1.sx/2 - roomba.size/2
 )
 {
 roomba.y = furn1.y + -roomba.size/2 + -furn1.sy/2;
 }
 else if (dY <= roomba.size/2 + furn1.sy/2 &&
 roomba.y + -roomba.size/2 <= furn1.y + furn1.sy/2 &&
-roomba.x <= furn1.x + furn1.sx/2 &&
-roomba.x >= furn1.x - furn1.sx/2
+roomba.x <= furn1.x + furn1.sx/2 + roomba.size/2 &&
+roomba.x >= furn1.x - furn1.sx/2 - roomba.size/2
 )
 {
 roomba.y = furn1.y + roomba.size/2 + furn1.sy/2;
-}
+} 
 
 
-      
+
+console.log("DX "+dX+", DY "+dY+", rx "+roomba.x+" ,fx "+furn1.x+", ry "+roomba.y+" ,fy "+furn1.y);
 
 }
   
@@ -341,10 +343,28 @@ function basePosition() {
     }
     
     if (dirts.length === 0) {
-      console.log("You win!");
+      console.log("");
     }
  
+   
+    strokeWeight(5);
+    fill(255,0,0);
+    rect(width/2,height/2, 100, 150);
+    circle(mouseX, mouseY, 100);
 
+    hit = collideRectCircle(width/2, height/2, 100, 150, mouseX, mouseY, 100);
+
+    // Use vectors as input:
+    // const mouse      = createVector(mouseX, mouseY);
+    // const rect_start = createVector(200, 200);
+    // const rect_size  = createVector(100, 150);
+    // const radius     = 100;
+    // hit = collideRectCircleVector(rect_start, rect_size, mouse, radius);
+
+    fill(hit ? color(255) : 0);
+    print('colliding?', hit);
+
+   
 
   }
 
