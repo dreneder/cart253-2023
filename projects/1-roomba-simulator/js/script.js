@@ -17,12 +17,6 @@
 
 "use strict";
 
-// /**
-//  * Description of preload
-// */
-// function preload() {
-
-// }
 
 
 // /**
@@ -37,66 +31,102 @@
 
 
 let roomba = {
-    x: 300,
-    y: 300,
-    size: 120,
-    angle: 0, // Facing right to start
-    speed: 0, // Start out not moving
-    maxSpeed: 5, // Moving at 5 pixels per frame
-    acceleration: 0.1, // How much velocity is gained when accelerating
-    brake: -1 // instead of draging for long it stops the device almost imediately
-  };
+  x: 0,
+  y: 0,
+  size: 120,
+  angle: 0, // Facing right as default but the same as base at start
+  speed: 0, // Start out not moving
+  maxSpeed: 5, // Moving at 5 pixels per frame
+  acceleration: 0.1, // How much velocity is gained when accelerating
+  brake: -1 // instead of draging for long it stops the device almost imediately
+};
 
-  // furn as in furniture
-  let furn1 = {
-    x: undefined,
-    y: undefined,
-    sx: undefined,
-    sy: undefined
-  };
 
-  let furn2 = {
-    x: undefined,
-    y: undefined,
-    sx: undefined,
-    sy: undefined
-  };
 
-  let furn3 = {
-    x: undefined,
-    y: undefined,
-    sx: undefined,
-    sy: undefined
-  };
 
 let base = {
   x: undefined,
   y: undefined,
   sx: 10,
-  sy: 90,
+  sy: 50,
   angle: 0
 };
+
+
+let charger = {
+  x: undefined,
+  y: undefined,
+  sx: 10,
+  sy: 40,
+  angle: 0
+}
+
+let lightAlpha = 0;
+
+let dirtStart = false;
+
+let hitBottom = false;
+let hitBottomAlt = false;
+
+let roombaOnBase = false;
+
+let battery = 100;
+
+let batteryColor = {
+  r: 52,
+  g: 206,
+  b: 237
+}
+
+let batteryBar = undefined;
+
+let batteryLevel = undefined;
+
+let clear = undefined;
 
 const DIRT_AMOUNT = 5000;
 let dirts = [];
 
-let hit = false;
+let hitFurn = false;
 
+let catImage = [];
+
+let catSound = [];
+
+let numMedia = 6;
+
+let storeImage;
+
+let storeSound;
+
+
+/**
+ * Importing images and sounds into the program
+*/
+function preload() {
+  for (let i = 0; i < numMedia; i++) {
+    let loadedCatImg = loadImage(`assets/images/cat${i}.png`);
+  catImage.push(loadedCatImg);
+  }
+
+}
+
+
+/**
+ * sets a few initial parameters of the simulation
+ */
 function setup() {
-    createCanvas(800, 800);
-    furnitureSize();
-    furniturePosition();
-    basePosition();
-
-  for (let i = 0; i < DIRT_AMOUNT; i++) {
-      let dirt = {
-        x: random(0, width),
-        y: random(0, height),
-        size: 2
-      }
-      dirts.push(dirt);
-    }
+  createCanvas(windowWidth,windowHeight);
+  basePosition();
+  startPosition();
   
+  
+  startDirt();
+  
+  
+  
+    
+
   }
   
 function draw() {
@@ -105,8 +135,10 @@ function draw() {
     handleInput();
     move();
     wrap();
-    wrapObstacle();
-  
+    baseLimit();
+    batteryCharge();
+    onBase();
+    cleared();
     display();
     
   }
@@ -136,6 +168,11 @@ function handleInput() {
       roomba.speed += roomba.brake;
       roomba.speed = constrain(roomba.speed, 0, roomba.maxSpeed);
     }
+    if (keyIsDown(32)) {
+      // spacebar to finish the level
+      
+    }
+   
   }
   
 function move() {
@@ -167,123 +204,202 @@ function wrap() {
     }
   }
 
-function wrapObstacle() {
-
-let dX = dist(roomba.x, 0, furn1.x, 0);
-let dY = dist(0, roomba.y, 0, furn1.y);
-
-if (dX <= roomba.size/2 + furn1.sx/2 &&
-roomba.x >= furn1.x - furn1.sx/2 - roomba.size/2 &&
-roomba.y <= furn1.y + furn1.sy/2 + roomba.size/2 &&
-roomba.y >= furn1.y - furn1.sy/2 - roomba.size/2
-)
-{
-roomba.x = furn1.x + -roomba.size/2 + -furn1.sx/2;
-}
-else if (dX <= roomba.size/2 + furn1.sx/2 &&
-roomba.x + -roomba.size/2 <= furn1.x + furn1.sx/2 &&
-roomba.y <= furn1.y + furn1.sy/2 + roomba.size/2 &&
-roomba.y >= furn1.y - furn1.sy/2 - roomba.size/2
-)
-{
-roomba.x = furn1.x + roomba.size/2 + furn1.sx/2;
-}
-
-if (dY <= roomba.size/2 + furn1.sy/2 &&
-roomba.y + roomba.size/2 >= furn1.y - furn1.sy/2 &&
-roomba.x <= furn1.x + furn1.sx/2 + roomba.size/2 &&
-roomba.x >= furn1.x - furn1.sx/2 - roomba.size/2
-)
-{
-roomba.y = furn1.y + -roomba.size/2 + -furn1.sy/2;
-}
-else if (dY <= roomba.size/2 + furn1.sy/2 &&
-roomba.y + -roomba.size/2 <= furn1.y + furn1.sy/2 &&
-roomba.x <= furn1.x + furn1.sx/2 + roomba.size/2 &&
-roomba.x >= furn1.x - furn1.sx/2 - roomba.size/2
-)
-{
-roomba.y = furn1.y + roomba.size/2 + furn1.sy/2;
-} 
-
-
-
-console.log("DX "+dX+", DY "+dY+", rx "+roomba.x+" ,fx "+furn1.x+", ry "+roomba.y+" ,fy "+furn1.y);
-
-}
-  
-
-  function furnitureSize() {
-    furn1.sx = random(100,300);
-    furn1.sy = random(100,300);
+  function startPosition() {
+      roomba.x = base.x;
+      roomba.y = base.y;
+      roomba.angle = base.angle-HALF_PI;
   }
 
-  // this furniture will limit the position of the furniture to the borders of the canvas
-function furniturePosition() {
-    furn1.x = random(0, width);
-    furn1.y = random(0, height);
+function basePosition() { // determines base position randomly
+  
+  base.x = random(0, width);
+  base.y = random(0, height);
+  
+  
 
-    // // limit the furniture position to the canvas
-    // furn1.x = constrain(furn1.x, furn1.sx/2, width - furn1.sx/2);
-    // furn1.y = constrain(furn1.y, furn1.sy/2, height - furn1.sy/2);
-
-    // make the furniture stay close to the wall if the distance is smaller than the roomba
-    if (furn1.x + -furn1.sx/2 < 0 + roomba.size/2 + furn1.sx/2) {
-        furn1.x = furn1.sx/2;
-    } else if (furn1.x + furn1.sx/2 > width - roomba.size/2) {
-        furn1.x = width - furn1.sx/2;
+  // the followings assign the position of the base, based on the closest wall
+  let distCenterX = dist(base.x,0,width/2,0);
+  let distCenterY = dist(0,base.y,0,height/2);
+  
+  if (distCenterX >= distCenterY) { // determines if that it's close to a X wall
+    if (base.x <= width/2) { // determines which X wall is closer 
+      base.x = 0 + 35; // attaches it to that wall
+      base.angle = PI+HALF_PI; // turns it to the correct angle
+      base.y = constrain(base.y,0+roomba.size/2*1.5,height-roomba.size/2*1.5); // limits the Y position so there's is room for the roomba to dock
+      charger.x = base.x;
+      charger.y = base.y;
+      charger.sx = 50;
+      charger.sy = 10;
     }
-    if (furn1.y + -furn1.sy/2 < 0 + roomba.size/2 + furn1.sy/2) {
-        furn1.y = furn1.sy/2;
-    } else if (furn1.y + furn1.sy/2 > height - roomba.size/2) {
-        furn1.y = height + -furn1.sy/2;
+    else {
+      base.x = width - 35;
+      base.angle = HALF_PI;
+      base.y = constrain(base.y,0+roomba.size/2*1.5,height-roomba.size/2*1.5);
+      charger.x = base.x - charger.sy;
+      charger.y = base.y + charger.sx;
+      charger.sx = 50;
+      charger.sy = 10;
     }
+  }
+  else { // does all the same as above but in case it is closer to a Y wall
+    if (base.y <= height/2) {
+      base.y = 0 + 35;
+      base.angle = 0;
+      base.x = constrain(base.x, 0+roomba.size/2*1.5,height-roomba.size/2*1.5);
+      charger.x = base.x;
+      charger.y = base.y;
+    }
+    else {
+      base.y = height - 35;
+      base.angle = PI;
+      base.x = constrain(base.x, 0+roomba.size/2*1.5,height-roomba.size/2*1.5);
+      charger.x = base.x;
+      charger.y = base.y - charger.sy;
+    }
+  }
+  // console.log("base.x "+base.x+", base.sx "+base.sx+", base.angle"+base.angle+", base.y "+base.y+", base.sy "+base.sy);
+}
 
-   
+function baseLimit() {
+// function defined so that the roomba won't hit the whole base and be in the right spot for charging
+// variables declared for line detection
+hitBottom = collideLineCircle(base.x-30,base.y+5,base.x+40,base.y+5,roomba.x,roomba.y,roomba.size);
+hitBottomAlt = collideLineCircle(base.x-30,base.y-5,base.x+40,base.y-5,roomba.x,roomba.y,roomba.size);
 
-    console.log("furn.x "+furn1.x+", furn.sx "+furn1.sx+", furn.y "+furn1.y+", furn.sy "+furn1.sy);
-    
+// if statement avoids overlapping by stablishing absolute position when roomba tries to pass
+if (base.angle === 0 &&  
+  hitBottom === true &&
+      roomba.y + roomba.size/2 >= base.y+5) {
+    roomba.y = base.y+5 + roomba.size/2;
+  }
+else if (base.angle === HALF_PI &&  // adjusted to all the possible angles
+  hitBottom === true &&
+    roomba.x + roomba.size/2 >= base.x-5) {
+  roomba.x = base.x-5 - roomba.size/2;
+}
+else if (base.angle === PI &&  
+  hitBottomAlt === true &&
+    roomba.y + roomba.size/2 >= base.y-5) {
+  roomba.y = base.y-5 - roomba.size/2;
+}
+else if (base.angle === PI+HALF_PI &&  
+  hitBottomAlt === true &&
+    roomba.x - roomba.size/2 <= base.x+5) {
+  roomba.x = base.x+5 + roomba.size/2;
+}
+}
+
+function startDirt() { //setting up function so that dirt does not overlap roomba or base at start
+
+// pippin's blessings:
+for (let i = 0; i < DIRT_AMOUNT; i++) {
+  let dirt = {
+    x: random(0, width),
+    y: random(0, height),
+    size: 2
+    }
+    // and my mad modz
+     dirtStart = collideCircleCircle(roomba.x,roomba.y,roomba.size+5,dirt.x,dirt.y,dirt.size+5);
+
+if (dirtStart === true) {
+dirt.x = random(0, width);
+dirt.y = random(0, height);
+}
+  dirts.push(dirt);
+}
 
 }
 
-function basePosition() {
-    // base.x = random(0, width);
-    // base.y = random(0, height);
 
-    // if (base.x <= width/2) {
-    //   base.x = 0 + roomba.size/2;
-    //   base.angle = PI;
-    // }
-    // else if (base.x > width/2) {
-    //   base.x = width + -roomba.size/2;
-    //   base.angle = 0;
-    // }
-    // if (base.y <= height/2) {
-    //   base.y = 0;
-    //   base.angle = HALF_PI;
-    // }
-    // else if (base.y > height/2) {
-    //   base.y = height;
-    //   base.angle = PI+HALF_PI;
-    // }
+function batteryCharge() { // the mechanics of the battery
+  // battery goes down according to the speed
+ let batteryDown = map(roomba.speed,0,5,0,0.02);
+// battery goes down also if speed is reversed
+ if (batteryDown < 0) {
+  batteryDown = -batteryDown;
+ }
+if (roomba.speed > 0.1  || roomba.speed < 0) { // battery starts going down at 0.1 speed
+  battery = battery - batteryDown;
+ }
+ // when battery is 30% or less the max speed starts going down accordingly to 1 and changes color to red
+if (battery <= 30) { 
+  roomba.maxSpeed = map(battery,0,30,1,5);
+  batteryColor.r = 217;
+  batteryColor.g = 12;
+  batteryColor.b = 9;
+ }
+ // roomba stops if battery is over
+if (battery <= 0) {
+  roomba.maxSpeed = 0;
+ }
+ else {
+  batteryColor.r = 52;
+  batteryColor.g = 206;
+  batteryColor.b = 237;
+ }
+
+batteryLevel = round(battery); // battery level is rounded for diplay
+batteryBar = map(batteryLevel,0,100,0,90); // reduces the battery bar
+}
+
+function onBase() {
+  // function to know if the roomba is on base so the suer can move to another level
+  let roombaOnBase = false;
   
+  roombaOnBase = collideRectCircle(charger.x,charger.y,charger.sx,charger.sy,roomba.x,roomba.y,roomba.size);
+  if (roombaOnBase === true) {
+    lightAlpha = 255; // light stays on when at base
+  }
+  else {
+    lightAlpha = 0;
+  }
+}
 
-    console.log("base.x "+base.x+", base.sx "+base.sx+", base.angle"+base.angle+", base.y "+base.y+", base.sy "+base.sy);
+
+// function to calculate percentage of the room cleaned
+function cleared() {
+let clean = map(dirts.length,0,DIRT_AMOUNT,100,0); //converts amount of dirt into percentage
+clear = round(clean); //rounds the percentage
+
+if (clean <= 1.5) {
+  clear = 0; // I really don't know how to name stuff, lol
+}
+
+console.log("clear "+clear);
 }
 
   
-  function display() {
+function display() {
 
    
-
+    // drawing the base
     push();
-    noFill()
-    stroke(0,255,0, 100);
-    strokeWeight(180);
-    rectMode(CENTER);
-    rect(width/2,height/2,width-60,height-60);
-    pop();
 
+    translate(base.x,base.y);
+    rotate(base.angle);
+    noStroke();
+    rectMode(CENTER);
+    fill(0);
+    rect(5, 30, 50, 70, 0, 0, 15, 15);
+    fill(255,50);
+    rect(5, 30, 40, 60, 0, 0, 15, 15);
+    fill(0);
+    rect(5, -15, 70, 40, 0, 0, 15, 15);
+    fill(255,100);
+    rect(5, -15, 60, 30, 0, 0, 13, 13);
+    fill (52, 206, 237, lightAlpha);
+    noStroke(); // lightning
+    beginShape();
+    vertex (-10, -14);
+    vertex (3, -15);
+    vertex (3, -10);
+    vertex (20, -16);
+    vertex (7, -15);
+    vertex (7, -22);
+    endShape(CLOSE);
+    pop();
+   
+    // drawing the roomba
     push();
     noStroke();
     translate(roomba.x, roomba.y); // translated to the roomba's centre
@@ -312,21 +428,10 @@ function basePosition() {
 
 
 
-    push();
-    translate(base.x,base.y);
-    rotate(base.angle);
-    noStroke();
-    fill(255,0,0);
-    rect(base.x,base.y,base.sx,base.sy);
-    pop();
 
 
-    fill(255);
-    noStroke();
-    rectMode(CENTER);
-    rect(furn1.x,furn1.y,furn1.sx,furn1.sy);
-    
   
+    // drawing the dirt (thanks Pippin)  
     for (let i = 0; i < dirts.length; i++) {
       let dirt = dirts[i];
       let d = dist(roomba.x, roomba.y, dirt.x, dirt.y);
@@ -334,7 +439,6 @@ function basePosition() {
         dirts.splice(i, 1);
       }
     }
-    
     for (let i = 0; i < dirts.length; i++) {
       let dirt = dirts[i];
       noStroke();
@@ -345,27 +449,33 @@ function basePosition() {
     if (dirts.length === 0) {
       console.log("");
     }
- 
+    
+
+    //drawing a battery for level
+    noStroke();
+    fill(170)
+    rectMode(CORNER);
+    rect(15,15,100,45);
+    rect(115,25,12,25);   
+    fill(0);
+    rect(20,20,90,35);
+    fill(batteryColor.r, batteryColor.g, batteryColor.b); // changes the battery colour
+    rect(20,20,batteryBar,35); // battery bar
+    textSize(30);
+    textAlign(CENTER,CENTER);
+    noStroke();
+    push();
+    blendMode(EXCLUSION);
+    fill(255);
+    text(batteryLevel+`%`,65,40);
+    pop();
+
+    // drawing the clean level
+    fill(255);
+    text('Clean: '+clear+`%`,width-90,40);
+    
+
    
-    strokeWeight(5);
-    fill(255,0,0);
-    rect(width/2,height/2, 100, 150);
-    circle(mouseX, mouseY, 100);
-
-    hit = collideRectCircle(width/2, height/2, 100, 150, mouseX, mouseY, 100);
-
-    // Use vectors as input:
-    // const mouse      = createVector(mouseX, mouseY);
-    // const rect_start = createVector(200, 200);
-    // const rect_size  = createVector(100, 150);
-    // const radius     = 100;
-    // hit = collideRectCircleVector(rect_start, rect_size, mouse, radius);
-
-    fill(hit ? color(255) : 0);
-    print('colliding?', hit);
-
-   
-
   }
 
 
