@@ -68,15 +68,15 @@ function createThreat(x, y) {
 function draw() {
   background(20, 128, 36);
 
-  if (screen === `title`) {
-    titleScree();
-  }
-  else if (screen === `terrarium`) {
-    terrarium();
-  }
-  else if (screen === `ending`) {
-    ending();
-  }
+  // if (screen === `title`) {
+  //   titleScree();
+  // }
+  // else if (screen === `terrarium`) {
+  //   terrarium();
+  // }
+  // else if (screen === `ending`) {
+  //   ending();
+  // }
 
   
   
@@ -96,12 +96,10 @@ function draw() {
     angleMode(DEGREES);
     let antAngle = atan2(mouseY - height / 2, mouseX - width / 2);
    
-  
 
-  
-    rotate(threatAngle);
     rectMode(CENTER);
-    rect(0,500,10,40);
+    rotate(threatAngle);
+    rect(0,60,10,40);
     rotate(antAngle);
     fill(255,0,0);
     rect(150,0,300,10);
@@ -144,34 +142,32 @@ function mousePressed() {
     school.push(fish);
 }
 
-// function beetlePosition() { // determines base position randomly
-  
-//   beetle.x = random(0, width);
-//   beetle.y = random(0, height);
-  
-//   // the followings assign the position based on the closest wall
-//   let distCenterX = dist(beetle.x,0,width/2,0);
-//   let distCenterY = dist(0,beetle.y,0,height/2);
-  
-//   if (distCenterX >= distCenterY) { // determines if that it's close to a X wall
-//     if (beetle.x <= width/2) { // determines which X wall is closer 
-//       beetle.x = 0 - 50; // attaches it to that wall
-//       beetle.y = random(0, height);
-//     }
-//     else {
-//       beetle.x = width + 50;
-//       beetle.y = random(0, height);
-//     }
-//   }
-//   else { // does all the same as above but in case it is closer to a Y wall
-//     if (beetle.y <= height/2) {
-//       beetle.y = 0 + 35;
-//       beetle.y = random(0, width);
-//     }
-//     else {
-//       beetle.y = height - 35;
-//       beetle.y = random(0, width);
-//     }
-//   }
+function drawWorker() { 
 
-// }
+  rectMode(CENTER);
+  fill(255,0,0);
+  noStroke();
+  ellipse(-30,0,55,40);
+  ellipse(10,0,45,25);
+  ellipse(40,0,35);
+  stroke(255,0,0);
+  strokeWeight(4);
+  line(15,-10,20,-30);
+  line(20,-30,35,-35);
+  line(15,10,20,30);
+  line(20,30,35,35);
+  line(10,-10,5,-30);
+  line(5,-30,-10,-35);
+  line(10,10,5,30);
+  line(5,30,-10,35); 
+  line(0,-10,-10,-25);
+  line(-10,-25,-35,-35);
+  line(0,10,-10,25);
+  line(-10,25,-35,35);
+  line(55,-5,65,-10);
+  line(55,5,65,10);
+  noFill();
+  stroke(0,0,255,0);
+  rect(0,0,120,60);// for measurement
+
+}

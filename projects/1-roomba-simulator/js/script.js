@@ -246,7 +246,7 @@ BEWARE OF THE CATS`
 }
 
 function nextStage() {
-let batteryRound = charged(round);
+let batteryRound = round(charged);
 
 let batteryShow = batteryLevel + charged;
 
