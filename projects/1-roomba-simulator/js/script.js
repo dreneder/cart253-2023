@@ -246,6 +246,8 @@ BEWARE OF THE CATS`
 }
 
 function nextStage() {
+let batteryRound = charged(round);
+
 let batteryShow = batteryLevel + charged;
 
     noStroke();
