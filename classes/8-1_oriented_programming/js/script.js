@@ -16,9 +16,6 @@ let garden = {
     }
   };
 
-function preload() {
-
-}
 
 
 function setup() {
