@@ -4,7 +4,9 @@
 
 let paddle;
 
-let ball;
+let balls = [];
+
+let numBalls = 3;
 
 let gravityForce = 0.0025;
 
@@ -14,9 +16,13 @@ createCanvas(windowWidth,windowHeight);
 
 paddle = new Paddle(300,20);
 
+for (let i = 0; i < numBalls; i++) {
+    let x = random(0,width);
+    let y = random(-400,-100);
+    let ball = new Ball(x,y);
 
-    ball = new Ball(width/2,height/2);
-
+    balls.push(ball);
+}
 }
 
 
@@ -27,12 +33,14 @@ function draw() {
     paddle.move();
     paddle.display();
 
- 
+    for (let i = 0; i < balls.length; i++) {
+        let ball = balls[i];
         if(ball.active) {
         ball.gravity(gravityForce);
         ball.move();
         ball.bounce(paddle);
         ball.display();
-        }
+    }
+}
 
 }
