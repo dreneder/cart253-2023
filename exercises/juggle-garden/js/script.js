@@ -2,27 +2,26 @@
 
 "use strict";
 
-let paddle;
-
-let balls = [];
-
-let numBalls = 3;
 
 let gravityForce = 0.0025;
+
+let earth;
+
+let rocket;
 
 
 function setup() {
 createCanvas(windowWidth,windowHeight);
 
-paddle = new Paddle(300,20);
+// paddle = new Paddle(300,20);
+// ball = new Ball(width/2,height/2);
 
-for (let i = 0; i < numBalls; i++) {
-    let x = random(0,width);
-    let y = random(-400,-100);
-    let ball = new Ball(x,y);
+let x = width/2;
+let y = height/4*3;
 
-    balls.push(ball);
-}
+rocket = new Rocket(x,y,0);
+earth = new Earth(width/2,height/2);
+
 }
 
 
@@ -30,17 +29,23 @@ function draw() {
     background(0);
 
 
-    paddle.move();
-    paddle.display();
+    // paddle.move();
+    // paddle.display();
+    
+    // if(ball.active) {
+    // ball.gravity(gravityForce);
+    // ball.move();
+    // ball.bounce(paddle);
+    // ball.display();
+    // }
 
-    for (let i = 0; i < balls.length; i++) {
-        let ball = balls[i];
-        if(ball.active) {
-        ball.gravity(gravityForce);
-        ball.move();
-        ball.bounce(paddle);
-        ball.display();
-    }
-}
+
+    earth.display();
+    rocket.display();
+    rocket.move();
+    rocket.handleInput();
+    
+
+
 
 }
