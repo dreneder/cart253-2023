@@ -54,8 +54,13 @@ handleInput() {
     }
     // Brake if the DOWN ARROW is pressed
     else if (keyIsDown(DOWN_ARROW)) {
+      if (this.speed > 0) {
       this.speed += this.braking;
       this.speed = constrain(this.speed, 0, this.maxSpeed);
+      }
+      else if (this.speed <= 0) {
+      this.speed -= this.acceleration;
+      this.speed = constrain(this.speed, -this.maxSpeed/4, 0);
     }
     else {
       // Apply drag if neither are pressed
@@ -63,6 +68,7 @@ handleInput() {
       this.speed = constrain(this.speed, 0, this.maxSpeed);
     }
   }
+}
 
 
 display() {
