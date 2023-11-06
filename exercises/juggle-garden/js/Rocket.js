@@ -1,126 +1,117 @@
 class Rocket {
 
-    constructor(_mass, _pos, _vel, angle) { // before was x,y,angle
-    // this.x = x;
-    // this.y = y;
-    this.width = 70;
-    this.height = 40;
-    this.vx = 0;
-    this.vy = 0;
-
-    this.angle = angle;
-    this.speed = 0;
-    this.maxSpeed = 100;
-    this.boost = 0.10;
-    this.reverseBoost = -0.1;
-    this.mass = _mass;
-    this.pos = _pos;
-    this.vel = _vel;
-      // this.path = [];
+    constructor(x,y,accx,accy,radius) { 
+      this.pos = createVector(x, y);
+      this.acceleration = createVector(accx, accy);
+      this.vel = createVector(0, 0);
+      this.radius = radius;
+      this.traj = [];
+      this.angle = 0;
+      this.count = 0;
+      this.mass = 10;
+      this.Gravity = 1;
+      this.width = 30;
+      this.height = 90;
     }
 
-
-move() {
-    this.vx = this.vx + this.ax;
-    this.vy = this.vy + this.ay;
-
-   this.vx = this.speed * cos(this.angle);
-   this.vy = this.speed * sin(this.angle);
-
-    this.x = this.x + this.vx;
-    this.y = this.y + this.vy;
-
-    // if(this.y - this.size/2 > height) {
-    //     this.active = false;
-    // }
-
-}
-
-
-
-handleInput() {
-    if (keyIsDown(LEFT_ARROW)) {
-      // Turn LEFT if the LEFT arrow is pressed
-      this.angle -= 0.05;
-    }
-    else if (keyIsDown(RIGHT_ARROW)) {
-      // Turn RIGHT if the RIGHT arrow is pressed
-      this.angle += 0.05;
-    }
-  
-    if (keyIsDown(UP_ARROW)) {
-      // Accelerate forward if the UP ARROW is pressed
-      this.speed += this.boost;
-      this.speed = constrain(this.speed, 0, this.maxSpeed);
-    }
-    // Brake if the DOWN ARROW is pressed
-    else if (keyIsDown(DOWN_ARROW)) {
-      if (this.speed > 0) {
-      this.speed += this.reverseBoost;
-      this.speed = constrain(this.speed, 0, this.maxSpeed);
-      }
-      else if (this.speed <= 0) {
-      this.speed -= this.boost;
-      this.speed = constrain(this.speed, -this.maxSpeed/4, 0);
-    }
-    else {
-      // Apply drag if neither are pressed
-    //   this.speed += this.drag;
-      this.speed = constrain(this.speed, 0, this.maxSpeed);
-    }
+rotation() { // only for rotating the rocket to the mouse location when drawn
+  if (mouseIsPressed) {
+    this.angle = atan2(mouseY - height/2, mouseX - width/2,) * 180 / PI;
   }
-}
-
-update() {
-  this.pos.x += this.vel.x;
-  this.pos.y += this.vel.y;
-  // this.path.push(createVector(this.pos.x,this.pos.y));
-  // if (this.path.length > 500) { // keep path at a constant lenght
-  //     this.path.splice(0,1);
-  // }
-
 }
 
 
 display() {
-  push();
+  push(); // draws the rocket
   translate(this.pos.x,this.pos.y);
   rotate(this.angle);
-  fill(255,0,0);
   noStroke();
   rectMode(CENTER);
-  rect(this.width/2+5,0,this.width,this.height-10);
   fill(255);
-  rect(5,0,this.width-60,this.height);
-  // strokeWeight(2);
-  // stroke(255);
-  // for (let i = 0; i < this.path.length-2; i++) {
-  //   line(this.path[i].x, this.path[i].y, this.path[i+1].x, this.path[i+1].y,);
-  // }
+  rect(0,0,this.width,this.height);
   pop();
-  
-}
 
 
-
-
-applyForce(f) {
-  this.vel.x += f.x / this.mass;
-  this.vel.y += f.y / this.mass;
-}
-
-
-attract(body) {
  
+  if (255 == this.count ) { // calculates the max amount of trail points
+    for (let i = 0; i < this.count-1; i++) {
+      this.traj[i] = this.traj[i+1];
+    }
+    this.traj[this.count-1] = createVector(this.pos.x,this.pos.y);
+  } else { // uses the last position of the rocket
+    this.traj[this.count] = createVector(this.pos.x,this.pos.y);
+    this.count++;
+  }// draws an orbit trail
+  for (let i =0; i < this.traj.length; i++) {
+    fill(252, 144, 3);
+    noStroke();
+    ellipse(this.traj[i].x, this.traj[i].y, 2, 2);
+  }
   
-  let r = dist(this.pos.x, this.pos.y, body.pos.x, body.pos.y);
-  let f = this.pos.copy().sub(body.pos);
-
-  f.setMag((gravity * this.mass * body.mass) / (r * r));
-
-  body.applyForce(f);
 }
 
+
+
+
+applyForce(force) { // adds force to the acceleration
+
+	this.acceleration.add(force);
+
+
+}
+
+
+newton () {
+  this.vel.add(this.acceleration);
+  this.pos.add(this.vel);
+  this.acceleration.mult(0);
+}
+
+
+
+orbit (body) {
+  let gravity_force = 0; 
+  let gravity_force_x = 0; 
+  let gravity_force_y = 0; 
+  let x_dir = 0;
+  let y_dir = 0;
+  let alpha =  0;
+
+
+  // gravitational force
+  let g_dist = dist(this.pos.x,this.pos.y,body.pos.x,body.pos.y)
+  gravity_force = ((this.Gravity * this.mass * body.mass)/(sq(g_dist)));
+  if (body.pos.x != this.pos.x) {
+    alpha = atan(abs((body.pos.y - this.pos.y)) / abs((body.pos.x - this.pos.x)));
+    gravity_force_x = gravity_force * cos(alpha);
+    gravity_force_y = gravity_force * sin(alpha);
+  } else {
+    gravity_force_x = 0;
+    gravity_force_y = gravity_force;
+  }	
+
+  // gravitational force direction
+  if (this.pos.x < body.pos.x) { // if going counter clockwise
+    if(this.pos.y < body.pos.y) {
+      x_dir = 1;
+      y_dir = 1;
+    } else {
+      x_dir = 1;
+      y_dir = -1;
+    }
+  } else {
+    if(this.pos.y < body.pos.y) { //if going clockwise
+      x_dir = -1;
+      y_dir = 1;
+    } else {
+      x_dir = -1;
+      y_dir = -1;
+    }
+  }
+
+  /* Apply gravitational force */
+  this.applyForce(createVector((x_dir * gravity_force_x), (y_dir * gravity_force_y)));
+}
 
 
 
