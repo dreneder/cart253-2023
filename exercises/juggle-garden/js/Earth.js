@@ -1,10 +1,10 @@
 class Earth {
 
     
-    constructor(x, y) {
+    constructor(x, y, radius) {
     this.pos = createVector(x, y);
-	this.radius = 300;
-	this.mass = 300;
+	this.radius = radius;
+	this.mass = 1000;
 
     
    

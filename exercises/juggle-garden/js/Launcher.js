@@ -2,7 +2,7 @@ class Launcher {
 
     constructor() { // defines parameters to launch the rocket in orbit according to mouse position
         this.x1 = width/2;
-        this.y1 = height/2-150;
+        this.y1 = height/2-200;
         this.x2 = 0; // these will be mouse position
         this.y2 = 0;
         this.force = 0;
@@ -60,7 +60,7 @@ class Launcher {
 						y_dir = -1;
 					}
 				}
-                let rocket = new Rocket(this.x1, this.y1, (x_dir * this.force_x),(y_dir * this.force_y),10);
+                let rocket = new Rocket(this.x1, this.y1, (x_dir * this.force_x),(y_dir * this.force_y),50,rocketAngle);
                 rockets.push(rocket); // creates the rocket
 			
 				liftoff = true;
@@ -75,12 +75,12 @@ class Launcher {
        push();
         if (this.launching) {
             // draws the line and the targert
-            strokeWeight(5);
+            strokeWeight(3);
             stroke(255,0,0);
-            line(this.x2-5,this.y2, this.x2+5, this.y2);
-            line(this.x2,this.y2-5, this.x2, this.y2+5);
+            line(this.x2-8,this.y2, this.x2+8, this.y2);
+            line(this.x2,this.y2-8, this.x2, this.y2+8);
             strokeWeight(1);
-            line(this.x1, this.y1+25, this.x2, this.y2);
+            line(this.x1, this.y1+50, this.x2, this.y2);
         }
         pop();
     }

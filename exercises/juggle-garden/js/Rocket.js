@@ -1,32 +1,30 @@
 class Rocket {
 
-    constructor(x,y,accx,accy,radius) { 
+    constructor(x,y,accx,accy,radius,angle) { 
       this.pos = createVector(x, y);
       this.acceleration = createVector(accx, accy);
       this.vel = createVector(0, 0);
       this.radius = radius;
       this.traj = [];
-      this.angle = 0;
+      this.angle = angle;
       this.count = 0;
       this.mass = 10;
       this.Gravity = 1;
       this.width = 90;
       this.height = 30;
+      this.orbitCount = 0;
+      this.orbitChecked = false;
+      this.orbitUnChecked = true;
+      this.orbitR = 255; 
+      this.orbitG = 0; 
+      this.orbitB = 0; 
     }
-
-rotation() { // only for rotating the rocket to the mouse location when drawn
-  push();
-  // translate(this.pos.x,this.pos.y);
-  this.angle = atan2(mouseY -height/2+150, mouseX - width/2);
-  pop();  
-  
-}
 
 
 display() {
   push(); // draws the rocket
   translate(this.pos.x,this.pos.y);
-  rotate(rocketAngle);
+  rotate(this.angle);
 imageMode(CENTER);
 image(rocketImg,0,0,120,40);
   // noStroke();
@@ -47,7 +45,7 @@ image(rocketImg,0,0,120,40);
     this.count++;
   }// draws an orbit trail
   for (let i =0; i < this.traj.length; i++) {
-    fill(252, 144, 3);
+    fill(this.orbitR,this.orbitG,this.orbitB);
     noStroke();
     ellipse(this.traj[i].x, this.traj[i].y, 2);
   }
@@ -115,6 +113,51 @@ orbit (body) {
 
   /* Apply gravitational force */
   this.applyForce(createVector((x_dir * gravity_force_x), (y_dir * gravity_force_y)));
+}
+
+bounds() { //calculates if the rocket has gone further than the a width or height and a half
+  if (this.pos.x > width*1.5 || 
+      this.pos.x < 0-width*1.5 ||
+      this.pos.y > height*1.5 ||
+      this.pos.y < 0-height*1.5) {
+        screen = `lost`; // the rocket is lost
+      }
+
+      // checks if the rockets collides with the earth
+      let d = dist(this.pos.x,this.pos.y,width/2,height/2);
+      if (d < 300/2) {
+        screen = `crashed`; // rocket is crashed :(
+      }
+}
+
+
+
+
+recordOrbits() {
+   let dOrbit = dist(this.pos.x,this.pos.y,orbitCounter.x,orbitCounter.y);
+   if (dOrbit <= 50 && this.orbitChecked === false) {
+    this.orbitChecked = true;
+  }
+  else if (dOrbit >= 50 && this.orbitChecked === true) {
+  this.orbitCount++;
+  this.orbitChecked = false;
+  }
+  // console.log(this.orbitCount);
+  
+   if (this.orbitCount > 1) {
+    this.orbitR = 255;
+    this.orbitG = 234;
+    this.orbitB = 0;
+  }
+  if (this.orbitCount > 2) {
+    this.orbitR = 0;
+    this.orbitG = 255;
+    this.orbitB = 0;
+  }
+  if (this.orbitCount > 3) {
+    screen = `mission complete`;
+  }
+
 }
 
 
