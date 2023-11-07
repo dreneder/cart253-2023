@@ -9,6 +9,7 @@
 "use strict";
 
 
+let screen = `title`; // sets first screen
 
 let earth;
 
@@ -24,7 +25,12 @@ let launcher;
 
 let liftoff = false;
 
-let rocketAngle = 0;
+let rocketAngle = undefined;
+
+let launched = false;
+
+let stars = [];
+
 
 /**
  * loading images for the earth and rocket
@@ -40,21 +46,28 @@ function preload() {
 */
 function setup() {
 	createCanvas(windowWidth,windowHeight);
+	
+	let milkyway = 5000;
+    for (let i = 0; i < milkyway; i++) {
+        let x = random(0, width);
+        let y = random(0, height);
+        stars.push(createVector(x, y)); // Store star positions in the array
+    }
 
-//creates earth at the middle of the canvas
-// as defined in class: size (or mass), position, velocity
-earth = new Earth (width/2,height/2);
-
-// rocket = new Rocket (width/2,height/2-150,0,0,10); // places the rocket just above earth
-
-launcher = new Launcher ();
-
+	//creates earth at the middle of the canvas
+	// as defined in class: size (or mass), position, velocity
+	earth = new Earth (width/2,height/2);
+	
+	launcher = new Launcher ();
+	
+	
 }
 
 
 function draw() {
-    background(0);
-
+	background(0);
+	displayStars(); // stars are always present
+	
  
 	earth.display();
 	
@@ -63,14 +76,13 @@ function draw() {
 	launcher.display();
    
 
-	for (let i = 0; i < rockets.length ; i++) {
-		
-		rockets[i].orbit(earth);
-		rockets[i].gravity();
-		rockets[i].display();
-		}
-		if (liftoff === true) { 
-
+	if (liftoff === true) { 
+			for (let i = 0; i < rockets.length ; i++) {
+				
+				rockets[i].orbit(earth);
+				rockets[i].gravity();
+				rockets[i].display();
+				}
 	}
 	else { 
 		initialRocket();
@@ -93,4 +105,13 @@ rotate(rocketAngle);
 imageMode(CENTER);
 image(rocketImg,0,0,120,40);
 pop();
+}
+
+// keeping it simple for the stars
+function displayStars() {
+    stroke(255);
+    for (let i = 0; i < stars.length; i++) {
+		stroke(random(250,255));
+        point(stars[i].x, stars[i].y);
+    }
 }

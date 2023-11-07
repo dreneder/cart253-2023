@@ -21,7 +21,7 @@ class Launcher {
 	
 	
 
-		if (mouseIsPressed) { // creates trajectory target
+		if (mouseIsPressed && rockets.length === 0) { // creates trajectory target
             this.launching = true;
 			this.x2 = mouseX;
 			this.y2 = mouseY;
@@ -66,6 +66,7 @@ class Launcher {
 				liftoff = true;
 			}
 			this.launching = false;
+			
 		}
 	}
 
