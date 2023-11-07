@@ -10,14 +10,16 @@ class Rocket {
       this.count = 0;
       this.mass = 10;
       this.Gravity = 1;
-      this.width = 30;
-      this.height = 90;
+      this.width = 90;
+      this.height = 30;
     }
 
 rotation() { // only for rotating the rocket to the mouse location when drawn
-  if (mouseIsPressed) {
-    this.angle = atan2(mouseY - height/2, mouseX - width/2,) * 180 / PI;
-  }
+  push();
+  // translate(this.pos.x,this.pos.y);
+  this.angle = atan2(mouseY -height/2+150, mouseX - width/2);
+  pop();  
+  
 }
 
 
@@ -33,7 +35,7 @@ display() {
 
 
  
-  if (255 == this.count ) { // calculates the max amount of trail points
+  if (500 == this.count ) { // calculates the max amount of trail points
     for (let i = 0; i < this.count-1; i++) {
       this.traj[i] = this.traj[i+1];
     }
@@ -45,7 +47,7 @@ display() {
   for (let i =0; i < this.traj.length; i++) {
     fill(252, 144, 3);
     noStroke();
-    ellipse(this.traj[i].x, this.traj[i].y, 2, 2);
+    ellipse(this.traj[i].x, this.traj[i].y, 2);
   }
   
 }
@@ -61,7 +63,7 @@ applyForce(force) { // adds force to the acceleration
 }
 
 
-newton () {
+gravity () {
   this.vel.add(this.acceleration);
   this.pos.add(this.vel);
   this.acceleration.mult(0);

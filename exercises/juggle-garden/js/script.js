@@ -12,7 +12,7 @@ let rockets = [];
 
 let launcher;
 
-
+let liftoff = false;
 
 function setup() {
 createCanvas(windowWidth,windowHeight);
@@ -23,7 +23,7 @@ createCanvas(windowWidth,windowHeight);
 // as defined in class: size (or mass), position, velocity
 earth = new Earth (width/2,height/2);
 
-// rocket = new Rocket (width/2,height/2-150,0,0,70); // places the rocket just above earth
+// rocket = new Rocket (width/2,height/2-150,0,0,10); // places the rocket just above earth
 
 launcher = new Launcher ();
 
@@ -38,17 +38,24 @@ function draw() {
 	for (let i = 0; i < rockets.length ; i++) {
 		
 		rockets[i].orbit(earth);
-		rockets[i].newton();
+		rockets[i].gravity();
 		rockets[i].display();
-	}
-
-
+		}
+	// 	if (liftoff === true) { 
+	// 	rocket.orbit(earth);
+	// 	rocket.gravity();
+	// }
+	// else { 
+	// 	rocket.rotation();
+	// }
+	earth.display();
+	
 	launcher.update();
+
 	launcher.display();
    
    
  
-    earth.display();
 
 // console.log(`rocket x`+round(rocket.pos.x)+` y `+round(rocket.pos.y));
 

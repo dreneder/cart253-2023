@@ -62,7 +62,8 @@ class Launcher {
 				}
                 let rocket = new Rocket(this.x1, this.y1, (x_dir * this.force_x),(y_dir * this.force_y),10);
                 rockets.push(rocket); // creates the rocket
-				
+			
+				liftoff = true;
 			}
 			this.launching = false;
 		}
@@ -78,7 +79,7 @@ class Launcher {
             line(this.x2-5,this.y2, this.x2+5, this.y2);
             line(this.x2,this.y2-5, this.x2, this.y2+5);
             strokeWeight(1);
-            line(this.x1, this.y1, this.x2, this.y2);
+            line(this.x1, this.y1+25, this.x2, this.y2);
         }
         pop();
     }
