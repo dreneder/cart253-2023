@@ -3,7 +3,7 @@ class Earth {
     
     constructor(x, y) {
     this.pos = createVector(x, y);
-	this.radius = 250;
+	this.radius = 300;
 	this.mass = 300;
 
     
@@ -16,12 +16,9 @@ class Earth {
         push();
         fill(100,100,255);
         noStroke();
-        ellipse(this.pos.x,this.pos.y,this.radius);
-        // strokeWeight(2);
-        // stroke(255);
-        // for (let i = 0; i < this.path.length-2; i++) {
-        //     line(this.path[i].x, this.path[i].y, this.path[i+1].x, this.path[i+1].y,);
-        // }
+        imageMode(CENTER);
+        image(earthImg,this.pos.x,this.pos.y,this.radius,this.radius)
+        // ellipse(this.pos.x,this.pos.y,this.radius);
         pop();
     }
 

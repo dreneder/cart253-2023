@@ -26,11 +26,13 @@ rotation() { // only for rotating the rocket to the mouse location when drawn
 display() {
   push(); // draws the rocket
   translate(this.pos.x,this.pos.y);
-  rotate(this.angle);
-  noStroke();
-  rectMode(CENTER);
-  fill(255);
-  rect(0,0,this.width,this.height);
+  rotate(rocketAngle);
+imageMode(CENTER);
+image(rocketImg,0,0,120,40);
+  // noStroke();
+  // rectMode(CENTER);
+  // fill(255);
+  // rect(0,0,this.width,this.height);
   pop();
 
 
