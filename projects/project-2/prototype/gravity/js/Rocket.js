@@ -10,9 +10,9 @@ class Rocket {
 
     this.angle = angle;
     this.speed = 0;
-    this.maxSpeed = 100;
-    this.boost = 0.1;
-    this.reverseBoost = -0.1;
+    this.maxSpeed = 1;
+    this.boost = 0.001;
+    this.reverseBoost = -0.001;
     this.mass = _mass;
     this.pos = _pos;
     this.vel = _vel;
@@ -23,8 +23,8 @@ class Rocket {
 move() {
 
 
-   this.vel.x = this.speed * cos(this.angle);
-   this.vel.y = this.speed * sin(this.angle);
+   this.vel.x += this.speed * cos(this.angle);
+   this.vel.y += this.speed * sin(this.angle);
 
     this.pos.x = this.pos.x + this.vel.x;
     this.pos.y = this.pos.y + this.vel.y;
@@ -112,16 +112,16 @@ applyForce(f) {
 }
 
 
-attract(body) {
+// attract(body) {
  
   
-  let r = dist(this.pos.x, this.pos.y, body.pos.x, body.pos.y);
-  let f = this.pos.copy().sub(body.pos);
+//   let r = dist(this.pos.x, this.pos.y, body.pos.x, body.pos.y);
+//   let f = this.pos.copy().sub(body.pos);
 
-  f.setMag((gravity * this.mass * body.mass) / (r * r));
+//   f.setMag((gravity * this.mass * body.mass) / (r * r));
 
-  body.applyForce(f);
-}
+//   body.applyForce(f);
+// }
 
 
 

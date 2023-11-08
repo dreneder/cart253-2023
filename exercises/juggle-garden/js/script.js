@@ -188,7 +188,7 @@ function crashed() {
     textSize(80);
     text(`MISSION FAILLED`,width/2,height/4);
     textSize(60);
-    text(`you CRASHED back on earth and waisted billions of dollars!`,width/2,height/2,width/2);
+    text(`you CRASHED back on earth and wasted billions of dollars!`,width/2,height/2,width/2);
 	// noLoop();
     
 }
@@ -200,7 +200,7 @@ function lost() {
     textSize(80);
     text(`MISSION FAILLED`,width/2,height/4);
     textSize(60);
-    text(`you launched the rocket into deep space billions of dollars!`,width/2,height/2,width/2);
+    text(`you launched the rocket into deep space and wasted billions of dollars!`,width/2,height/2,width/2);
 	// noLoop();
     
 }

@@ -1,4 +1,15 @@
-
+/**
+ * Space prototype
+ * André Neder
+ * 
+ * This is my attempt to write some of the code for my final project in which the user should
+ * be able to control the rocket using the booster but still suffer the effects from gravity and eventually
+ * use it to increase its' speed.
+ * 
+ * I stated this code from the object oriented programming activity and 
+ * based gravity code and calculations on a project by Michael Ruppe: https://github.com/michaelruppe/art/tree/master/solar-system-p5
+ * 
+ */
 
 "use strict";
 
@@ -11,7 +22,7 @@ let rocket;
 
 let moon;
 
-let gravity = 100;
+let gravity = 1;
 
 let destabilise = 0.2;
 
@@ -51,10 +62,11 @@ rocketVel.rotate(HALF_PI); // sets direction to 90 degrees clockwise (-HALF_PI f
 // sets the magnetude which makes the object fall into orbit instead of just falling to earth according te formula here: https://en.wikipedia.org/wiki/Orbital_speed
 moonVel.setMag(sqrt(gravity * earth.mass/moonPos.mag()));
 rocketVel.setMag(sqrt(gravity * earth.mass/rocketPos.mag()));
+rocketVel = createVector(0,0);
 // moonVel.mult(random(1 - destabilise, 1 + destabilise));
 // rocketVel.mult(random(1 - destabilise, 1 + destabilise));
 moon = new Earth (70, moonPos, moonVel); // places the object just like the earth
-rocket = new Rocket (70, rocketPos, rocketVel, rocketAngle); // places the object just like the earth
+rocket = new Rocket (10, rocketPos, rocketVel, rocketAngle); // places the object just like the earth
 
 }
 
