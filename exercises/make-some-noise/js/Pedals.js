@@ -12,6 +12,7 @@ pedalDown(){ // changes size and makes the pedal true when pressed
     if (keyIsDown(65)) {
         clutch = true;
         this.c = 0.75;
+        currentGear = 0; // clutch behaves like neutral
     }
     else {
         this.c = 1;
@@ -52,10 +53,16 @@ display(){
     textStyle(BOLD);
     textSize(40*this.c);
     text(`A`,-150,0);
+    textSize(11*this.c);
+    text(`(CLUTCH)`,-150,25);
     textSize(40*this.b);
     text(`S`,-0,0);
+    textSize(11*this.b);
+    text(`(BRAKE)`,0,25);
     textSize(40*this.a);
     text(`D`,150,0);
+    textSize(11*this.a);
+    text(`(GAS)`,150,25);
     pop();
 }
 

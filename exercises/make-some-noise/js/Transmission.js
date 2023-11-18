@@ -15,7 +15,7 @@ class Transmission {
     
     pressed() {
         // translating mouse position for this
-        let translatedMouseX = mouseX - 900;
+        let translatedMouseX = mouseX - 980;
         let translatedMouseY = mouseY - 450;
             
         //  let the gear shift move if clicked on
@@ -58,22 +58,22 @@ class Transmission {
         
         
         // defining when the car is at a gear or not
-        if (this.stick === this.gear1) {
+        if (dist(this.stick.x,this.stick.y,this.gear1.x,this.gear1.y) < 15) {
             currentGear = 1;
         }
-        else if (this.stick === this.gear2) {
+        else if (dist(this.stick.x,this.stick.y,this.gear2.x,this.gear2.y) < 15) {
             currentGear = 2;
         }
-        else if (this.stick === this.gear3) {
+        else if (dist(this.stick.x,this.stick.y,this.gear3.x,this.gear3.y) < 15) {
             currentGear = 3;
         }
-        else if (this.stick === this.gear4) {
+        else if (dist(this.stick.x,this.stick.y,this.gear4.x,this.gear4.y) < 15) {
             currentGear = 4;
         }
-        else if (this.stick === this.gear5) {
+        else if (dist(this.stick.x,this.stick.y,this.gear5.x,this.gear5.y) < 15) {
             currentGear = 5;
         }
-        else if (this.stick === this.reverse) {
+        else if (dist(this.stick.x,this.stick.y,this.reverse.x,this.reverse.y) < 15) {
             currentGear = 6;
         }
         else if (this.stick.y === 0) {
@@ -89,6 +89,12 @@ class Transmission {
              this.stick.y = 180;
          }
          else {this.stick.y = 0}
+         if (this.stick.x <= -95 && lineN === false) {
+            this.stick.x = -110;
+         }
+         else if (this.stick.x >= 95 && lineN === false) {
+            this.stick.x = 110;
+         }
         }
     }
 
@@ -125,8 +131,6 @@ class Transmission {
         text(`R`,this.reverse.x,this.reverse.y+70);
         
         pop();
-
-        
     }
 
 
