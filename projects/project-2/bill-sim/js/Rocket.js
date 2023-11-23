@@ -115,50 +115,10 @@ orbit (body) {
   this.applyForce(createVector((x_dir * gravity_force_x), (y_dir * gravity_force_y)));
 }
 
-bounds() { //calculates if the rocket has gone further than the a width or height and a half
-  if (this.pos.x > width*1.5 || 
-      this.pos.x < 0-width*1.5 ||
-      this.pos.y > height*1.5 ||
-      this.pos.y < 0-height*1.5) {
-        screen = `lost`; // the rocket is lost
-      }
-
-      // checks if the rockets collides with the earth
-      let d = dist(this.pos.x,this.pos.y,width/2,height/2);
-      if (d < 300/2) {
-        screen = `crashed`; // rocket is crashed :(
-      }
-}
 
 
 
 
-recordOrbits() {
-   let dOrbit = dist(this.pos.x,this.pos.y,orbitCounter.x,orbitCounter.y);
-   if (dOrbit <= 50 && this.orbitChecked === false) {
-    this.orbitChecked = true;
-  }
-  else if (dOrbit >= 50 && this.orbitChecked === true) {
-  this.orbitCount++;
-  this.orbitChecked = false;
-  }
-  // console.log(this.orbitCount);
-  
-   if (this.orbitCount > 1) {
-    this.orbitR = 255;
-    this.orbitG = 234;
-    this.orbitB = 0;
-  }
-  if (this.orbitCount > 2) {
-    this.orbitR = 0;
-    this.orbitG = 255;
-    this.orbitB = 0;
-  }
-  if (this.orbitCount > 3) {
-    screen = `mission complete`;
-  }
-
-}
 
 
 
