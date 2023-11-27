@@ -48,7 +48,7 @@ class Particle {
       strokeWeight(1);
       ellipse(this.x, this.y, size);
 
-      console.log (this.fireLevel);
+      // console.log (this.fireLevel);
     }
     
     finished() {
