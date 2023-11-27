@@ -11,38 +11,65 @@
 
 let smoke = []; // array for the smoke
 
+let ground = {
+  x: 0,
+  y: 0
+};
+
 let rocket = { // rocket variable
   x: 0,
   y: 0,
   speed: 0
 };
 
+let stage1 = {
+  x: 0,
+  y: 0
+};
+
+let stage2 = {
+  x: 0,
+  y: 0
+};
+
+let rocketSprite;
+let groundSprite;
+
 let stageCounter = 0; // variable to keep each action separate
 
 function setup() {
-  let canvas = createCanvas(windowWidth, windowHeight);
-  rocket.y = height/8*7; // initial rocket y position on the ground
+  createCanvas(windowWidth, windowHeight);
+  rocket.x = width/2; // initial rocket y position on the ground
+  rocket.y = height/4*3; // initial rocket y position on the ground
+  ground.x = width/2;
+  ground.y = height/16*15;
+
+  
   
 }
 
 function draw() {
-  background(255);
+  background(183, 226, 247);
 
+
+  translate(width/2-rocket.x,height/2-rocket.y);
   // drawing a ground at the bottom
   noStroke();
   fill(0,200,0);
-  rect(0,height/8*7,width,height-height/8*7);
+  rectMode(CENTER);
+  rect(ground.x,ground.y,width,height-height/8*7);
+  
   
   launch(); // function to enable the stageCounter
 
-  rocket.x = width/2; // defining rocket x position (won't change)
-  if (stageCounter >= 1) { // once stages advance
+  // rocket.x = width/2; // defining rocket x position (won't change)
+  // if (stageCounter >= 1) { // once stages advance
   for (let i=0; i<5; i++){
     let p = new Particle(1, 1, rocket.x, rocket.y); // loop creates particles
     smoke.push(p);
     smoke[i].liftOff();
   }
-}
+// }
   
   for (let i = smoke.length-1; i >= 0; i--) { // loop moves the particles 
     smoke[i].move();
@@ -56,28 +83,17 @@ function draw() {
     strokeWeight(5);
     stroke(40);
     fill(250);
-    rect(rocket.x-30,rocket.y,60,-200);
+    rect(rocket.x,rocket.y,60,400);
 
-
-    noStroke();
-    fill(0);
-    textSize(20);
-    text(`Press ANY KEY to start booster and CLICK for liftoff`,40,40);
-
-    console.log(stageCounter);
+    // console.log(stageCounter);
     
+  camera.y = rocket.y;
+
     }
 
 function launch() { // controls the stages
-  if (keyIsPressed && stageCounter < 1) {
-    stageCounter = 1;
-  }
-  if (mouseIsPressed && stageCounter === 1) {
-    stageCounter = 2;
-  }
-   if (stageCounter === 2 ) {
-    rocket.speed += 0.01;
-    rocket.y -= rocket.speed;
+  if (keyIsDown(UP_ARROW)) {
+    rocket.y -= 10;
   }
 }
 
