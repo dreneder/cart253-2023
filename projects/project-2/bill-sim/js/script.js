@@ -52,7 +52,7 @@ function preload() {
  * inserting the earth and launcher classes as well as the stars
 */
 function setup() {
-	
+	createCanvas(windowWidth,windowHeight);
 
 	//creates earth at the middle of the canvas
 	// as defined in class: size (or mass), position, velocity
