@@ -17,7 +17,7 @@ let travelShipSprite;
 let earthImg;
 let marsImg;
 
-let state = 'travel';
+let state = 'launch';
 
 let stars = [];
 
