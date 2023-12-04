@@ -131,6 +131,8 @@ function draw() {
     travel();
   }
   
+  
+
 }
 
 
@@ -250,7 +252,7 @@ function launchDay() {
 }
 pop();
   
-  console.log(spaceShip.y);
+  
   
   // spaceShip.draw();
   // stage2.draw();
@@ -295,11 +297,11 @@ function launch() { // controls the stages
     if (stageCounter === 0 && lifted === false) {
       lifted = true;
     }
-    else if (stageCounter === 0 && lifted === true && altitude > 10) {
+    else if (stageCounter === 0 && lifted === true && altitude > 100) {
       dock1.remove();
       stageCounter = 1;
     }
-    else if (stageCounter === 1) {
+    else if (stageCounter === 1 && altitude > 150) {
       dock2.remove();
       stageCounter = 2;
     }
@@ -310,42 +312,48 @@ function launch() { // controls the stages
 }
 
 function handleInput() {
-  let axisMax = map(altitude,0,200,0.1,30);
+  
 
   if (stageCounter === 0) {
     if (kb.pressing('left')) {
-    rocket.rotation -= axisMax;
+    rocket.rotation -= 0.1;
     }
     else if (kb.pressing('right')) {
-    rocket.rotation += axisMax;
+    rocket.rotation += 0.1;
     }
     if (kb.pressing('up')) {
-      rocket.bearing = -90;
-      rocket.applyForce(10000);
+      let xForce = cos(rocket.rotation-90) * 10000;
+    let yForce = sin(rocket.rotation-90) * 10000;
+    rocket.bearing = -90;
+      rocket.applyForce(createVector(xForce, yForce))
       }
     }
   else if (stageCounter === 1) {
     if (kb.pressing('left')) {
-    stage2.rotation -= axisMax;
+    stage2.rotation -= 0.5;
     }
     else if (kb.pressing('right')) {
-    stage2.rotation += axisMax;
+    stage2.rotation += 0.5;
     }
     if (kb.pressing('up')) {
-      stage2.bearing = -90;
-      stage2.applyForce(10000);
+      let xForce = cos(stage2.rotation-90) * 1000;
+    let yForce = sin(stage2.rotation-90) * 1000;
+    stage2.bearing = -90;
+      stage2.applyForce(createVector(xForce, yForce));
       }
     }
   else if (stageCounter === 2) {
     if (kb.pressing('left')) {
-    spaceShip.rotation -= axisMax;
+    spaceShip.rotation -= 1;
     }
     else if (kb.pressing('right')) {
-    spaceShip.rotation += axisMax;
+    spaceShip.rotation += 1;
     }
     if (kb.pressing('up')) {
-      spaceShip.bearing = -90;
-      spaceShip.applyForce(10000);
+      let xForce = cos(spaceShip.rotation-90) * 500;
+    let yForce = sin(spaceShip.rotation-90) * 500;
+    spaceShip.bearing = -90;
+      spaceShip.applyForce(createVector(xForce, yForce));
       }
     }
   

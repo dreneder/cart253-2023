@@ -1,5 +1,5 @@
 /**
- * Space, the only frontier
+ * 2024 Billionaire Simulator: Mission to Mars
  * André Neder
  * 
  * This is my attempt to write some of the code for my final project while doing the
@@ -13,75 +13,98 @@
 "use strict";
 
 
-// variables for classes 
-let earth; 
+// variables for sprites 
+let earth;
+let moon;
+let mars;
+let spaceShip;
 
-let rocket;
-let rockets = []; // array for the class
-
-let launcher;
-
-// variables for images
+// variables for images 
 let earthImg;
-
-let rocketImg;
-
-// variables to be used globaly
-let liftoff = false;
-
-let rocketAngle = undefined;
-
-// ****STARS****
-let stars = [];
-
-let orbitCounter = {
-	x:0,
-	y:0
-};
+let marsImg;
+let moonImg;
+let spaceShipImg;
 
 /**
- * loading images for the earth and rocket
+ * loading images for the sprites
 */
 function preload() {
 	earthImg = loadImage("assets/images/earth.png");
-	rocketImg = loadImage("assets/images/rocket.png");
+	moonImg = loadImage("assets/images/moon.png");
+	marsImg = loadImage("assets/images/mars.png");
+	spaceShipImg = loadImage('assets/images/starship.png');
+
 }
 
 
 /**
- * inserting the earth and launcher classes as well as the stars
+ * inserting all sprites and dclaring a few parameters
 */
 function setup() {
 	createCanvas(windowWidth,windowHeight);
 
-	//creates earth at the middle of the canvas
-	// as defined in class: size (or mass), position, velocity
-	earth = new Earth (width/2,height/2, 300);
+
+	spaceShip = new Sprite(2500,-2500);
+	earth = new Sprite(0,0,1000);
+	mars = new Sprite(4000,-4000,2030);
+	moon = new Sprite(0,-2000,1300);
 	
-	launcher = new Launcher ();
+	earth.img = earthImg;
+	earth.collider = 'static';
+	earth.scale = 1;
 	
+	mars.img = marsImg;
+	mars.collider = 'static';
+	mars.scale = 0.5;
 	
+	moon.collider = 'dynamic';
+	moon.img = moonImg;
+	moon.scale = 0.075;
+	moon.vel.x = 5;
+	
+	spaceShip.img = spaceShipImg;
+	spaceShip.scale = 0.1;
 }
 
 
 function draw() {
 	background(0);
-	earth.display();
-	
-	launcher.update();
-	launcher.display();
-	// shoots the rocket
-	for (let i = 0; i < rockets.length ; i++) {
-		rocket = rockets[i];
-		rocket.orbit(earth);
-		rocket.gravity();
-		rocket.display();
-		rocket.bounds();
-		rocket.recordOrbits();
-		camera.x = rocket.x;
-		camera.y = rocket.y;
-		}
 
+	if (kb.pressing('left')) spaceShip.rotation -= 3;
+	else if (kb.pressing('right')) spaceShip.rotation += 3;
+	
+	
+	if (kb.pressing('up')) {
+	let xForce = cos(spaceShip.rotation-90) * 500;
+    let yForce = sin(spaceShip.rotation-90) * 500;
+    spaceShip.applyForce(createVector(xForce, yForce));
+	}
+	if (kb.pressing('down')) {
+	let xForce = cos(spaceShip.rotation+90) * 500;
+    let yForce = sin(spaceShip.rotation+90) * 500;
+    spaceShip.applyForce(createVector(xForce, yForce));
+	}
+
+	// if (spaceShip.colliding(moon)) {
+	// 	moon.collider = 'static';
+	// 	moon.vel.x = 0;
+	// }
+	// else {
+	// 	moon.collider = 'dynamic';
+	// 	moon.vel.x = 5;
+	// }
+
+	moon.attractTo(earth,2000);
+	
+
+	mars.debug = mouse.pressing();
+
+
+	camera.zoom = 0.5;
+	camera.x = spaceShip.x;
+	camera.y = spaceShip.y;
+
+	console.log('X '+spaceShip.x,'Y '+spaceShip.y);
 		
 
 }
