@@ -2,10 +2,10 @@
  * 2024 Billionaire Simulator: Mission to Mars
  * André Neder
  * 
- * This is my attempt to write some of the code for my final project while doing the
- * object oriented programming exercise.
- * It consists of launching and object into space and completing orbits around earth.
- * Once 3 orbits are complete you win.
+ * The Billionaire Simulator (BS for short) is based based on the current commercial space race and the
+ * rich people that take part in it. The game is divided in two parts: the launch and the interplanetary
+ * travel to Mars. The code makes a huge use of the p5play library by Quinton Ashley, so all of the
+ * objects have been written as sprites, so the camera object could work properly.
  * I based my code on a gravity prototype from Miachel Ruppe: https://github.com/michaelruppe/art/tree/master/solar-system-p5
  * 
  */
@@ -25,28 +25,54 @@ let marsImg;
 let moonImg;
 let spaceShipImg;
 
+// variables for distances
 let distEarth;
 let distMoon;
 let distMars;
 
-let refEarth;
-let refMoon;
-let refMars;
+//variables for UI
+let travelUI = {
+	x: 0,
+	y: 0
+};
+let earthAngle;
+let moonAngle;
+let marsAngle;
+let shipSpeed = 0;
+let displaySpeed = 0;
+let warningSpeed = false;
+let warningFuel = false;
+let warningDistance = false;
+let fuel = 98;
 
+
+//variables for stars
 let stars = [];
 let border = 100;
-
 let starVelX = 0;
 let starVelY = 0;
 
+// font for the game
+let spaceFont;
+
+//array for mission control sounds
+let missionSound = [];
+
 /**
- * loading images for the sprites
+ * loading fonts and sounds and images for the sprites
 */
 function preload() {
 	earthImg = loadImage("assets/images/earth.png");
 	moonImg = loadImage("assets/images/moon.png");
 	marsImg = loadImage("assets/images/mars.png");
 	spaceShipImg = loadImage('assets/images/starship.png');
+
+	spaceFont = loadFont('assets/fonts/BebasNeue-Regular.ttf');
+
+	for (let i = 0; i < 31; i++) {
+		let loadedSound = loadSound(`assets/sounds/${i}.wav`);
+	  missionSound.push(loadedSound);
+	  }
 
 }
 
@@ -61,13 +87,14 @@ function setup() {
 	for (let i = 0; i < 2000; i++) {
 		stars.push(new Star());
 	  }
+
+
+	  allSprites.autoCull = false;
 	  
-	  
-	allSprites.autoCull = false;
 
 	spaceShip = new Sprite(-500,-500);
 	earth = new Sprite(0,0,1000);
-	mars = new Sprite(20000,-20000,2030);
+	mars = new Sprite(50000,-35000,2030);
 	moon = new Sprite(-2500,0,1300);
 	
 	
@@ -91,9 +118,9 @@ function setup() {
 	spaceShip.vel.y = -2.5;
 	spaceShip.rotation = -30;
 
-
-	refEarth = new Sprite(0,0,100,15);
-	refEarth.visible = false;
+	travelUI.x = width/2;
+	travelUI.y = height+160;
+	travelUI = new UI(travelUI.x,travelUI.y);
 
 
 }
@@ -115,6 +142,11 @@ function draw() {
 	 camera.x = spaceShip.x;
 	camera.y = spaceShip.y;
 
+	spaceShip.draw();
+	earth.draw();
+	moon.draw();
+	mars.draw();
+
 	if (kb.pressing('left')) spaceShip.rotation -= 3;
 	else if (kb.pressing('right')) spaceShip.rotation += 3;
 	
@@ -123,6 +155,7 @@ function draw() {
 	let xForce = cos(spaceShip.rotation-90) * 500;
     let yForce = sin(spaceShip.rotation-90) * 500;
     spaceShip.applyForce(createVector(xForce, yForce));
+	fuel -= 0.01;
 	}
 	if (kb.pressing('down')) {
 	let xForce = cos(spaceShip.rotation+90) * 500;
@@ -135,54 +168,50 @@ function draw() {
 		spaceShip.vel.y = 0;
 	}
 
-	// if (spaceShip.colliding(moon)) {
-	// 	moon.collider = 'static';
-	// 	moon.vel.x = 0;
-	// }
-	// else {
-	// 	moon.collider = 'dynamic';
-	// 	moon.vel.x = 5;
-	// }
 	distEarth = dist(spaceShip.x,spaceShip.y,earth.x,earth.y);
 	distMoon = dist(spaceShip.x,spaceShip.y,moon.x,moon.y);
 	distMars = dist(spaceShip.x,spaceShip.y,mars.x,mars.y);
 	
 
 	spaceShip.attractTo(earth,map(distEarth,500,3000,500,0,true));
+	spaceShip.attractTo(moon,map(distMars,250,1000,250,0,true));
 	spaceShip.attractTo(mars,map(distMars,500,3000,500,0,true));
 	
 
 	moon.attractTo(earth,500);
 
 	
-	spaceShip.debug = mouse.pressing();
+	moon.debug = mouse.pressing();
 	
 	// console.log('sX '+round(spaceShip.vel.x),'sY '+round(spaceShip.vel.y)+'X '+round(spaceShip.x),'Y '+round(spaceShip.y));
 	
 	
 	
-
-
-	camera.off();
-	refEarth.draw();
-	refEarth.x = width/2;
-	refEarth.y = height/9*8;
-	angleMode(DEGREES);
-	let angle = atan2(earth.y-spaceShip.y-refEarth.y/2,earth.x-spaceShip.x-refEarth.x/2);
-	refEarth.rotate(angle);
 	
-	push();
-	translate(width/2,height/9*8);
+	camera.off();
+	
+	//slides the UI according to the zoom
+	if (camera.zoom === 1) {
+		if (travelUI.y > height-50){
+			travelUI.y -= 3;
+		}
+		if (travelUI.y <= height-50){
+			travelUI.y = height-50;
+		}
+	}
+	else if (camera.zoom === 5) {
+		if (travelUI.y < height+160){
+			travelUI.y += 3;
+		}
+		if (travelUI.y >= height+160){
+			travelUI.y = height+160;
+		}
+	}
+	travelUI.display();
+	
 
-	rectMode(CENTER);
-	rotate(angle);
-	fill(255);
-	rect(0,0,100,15);
-	fill(255,0,0)
-	ellipse(50,0,20);
-
-	console.log(angle);
-	pop();
+	
+	
 
 
 
