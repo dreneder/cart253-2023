@@ -2,10 +2,10 @@
  * 2024 Billionaire Simulator: Mission to Mars
  * André Neder
  * 
- * This is my attempt to write some of the code for my final project while doing the
- * object oriented programming exercise.
- * It consists of launching and object into space and completing orbits around earth.
- * Once 3 orbits are complete you win.
+ * The Billionaire Simulator (BS for short) is based based on the curent comercial space race and the
+ * rich people that take part in it. The game is divided in two parts: the launch and the interplanetary
+ * travel to Mars. The code makes a huge use of the p5play library by Quinton Ashley, so all of the
+ * objects have been written as sprites, so the camera object could work properly.
  * I based my code on a gravity prototype from Miachel Ruppe: https://github.com/michaelruppe/art/tree/master/solar-system-p5
  * 
  */
