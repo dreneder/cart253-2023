@@ -21,32 +21,32 @@ SPACEBAR - advances through the screens or stages, enables audio playback on the
 
 Reference of sound files:
 
-1 - Mission go for launch
-2 - Vehicle powered up
-3 - 10
-4 - 9
-5 - 8
-6 - 7
-7 - 6
-8 - 5
-9 - 4
-10 - 3
-11 - 2
-12 - 1
-13 - 0
-14 - First stage boosters ignition
-15 - Liftoff
-16 - Vehicle supersonic
-17 - MECO
-18 - First stage separation complete
-19 - Second stage ignition
-20 - SECO
-21 - Second stage separation complete
-22 - Space ship boosters engaged
-23 - Orbital checkouts
-24 - Orbit deployment complete
-25 - Fuel instructions
-26 - Gravity assist instruction
-27 - Engage boosters for decelaration
-28 - Approaching Mars orbit
-29 - Mars landing complete
+0 - Mission go for launch
+1 - Vehicle powered up
+2 - 10
+3 - 9
+4 - 8
+5 - 7
+6 - 6
+7 - 5
+8 - 4
+9 - 3
+10 - 2
+11 - 1
+12 - 0
+13 - First stage boosters ignition
+14 - Liftoff
+15 - Vehicle supersonic
+16 - MECO
+17 - First stage separation complete
+18 - Second stage ignition
+19 - SECO
+20 - Second stage separation complete
+21 - Space ship boosters engaged
+22 - Orbital checkouts
+23 - Orbit deployment complete
+24 - Fuel instructions
+25 - Gravity assist instruction
+26 - Engage boosters for decelaration
+27 - Approaching Mars orbit
+28 - Mars landing complete
