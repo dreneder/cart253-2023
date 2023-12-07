@@ -21,8 +21,8 @@ SPACEBAR - advances through the screens or stages, enables audio playback on the
 
 Reference of sound files:
 
-0 - Mission go for launch
-1 - Vehicle powered up
+0 - Vehicle powered up
+1 - Mission go for launch
 2 - 10
 3 - 9
 4 - 8
@@ -50,3 +50,5 @@ Reference of sound files:
 26 - Engage boosters for decelaration
 27 - Approaching Mars orbit
 28 - Mars landing complete
+29 - Mission failed
+30 - Claps
