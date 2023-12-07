@@ -130,16 +130,6 @@ let fadeTransition = 255;
  * loading fonts and sounds and images for the sprites
 */
 function preload() {
-	launchShipImg = loadImage('assets/images/starship.png');
-	stage2Img = loadImage('assets/images/stage2.png');
-	rocketImg = loadImage('assets/images/rocket.png');
-	baseImg = loadImage('assets/images/base.png');
-
-	earthImg = loadImage('assets/images/earth.png');
-	moonImg = loadImage('assets/images/moon.png');
-	marsImg = loadImage('assets/images/mars.png');
-	spaceShipImg = loadImage('assets/images/starship.png');
-	
 
 	spaceFont = loadFont('assets/fonts/BebasNeue-Regular.ttf');
 
@@ -156,24 +146,14 @@ function preload() {
 */
 function setup() {
 	createCanvas(windowWidth,windowHeight);
-	for (let i = 0; i < 2000; i++) {
-		stars.push(new Star());
-	}
-	textFont(spaceFont);
 
-	// // travel class
-	// travel = new Travel();
-	// travel.setup();
+	textFont(spaceFont);
 	
-	// launch class
-	launch = new Launch();
-	launch.setup();
-	
-	// marsBkg = loadAni('assets/images/msprite_1.png', 9);
-	// marsBkg.scale.x = width/1280;
-	// marsBkg.scale.y = height/720;
-	// marsBkg.noLoop();
-	// marsBkg.stop();
+	marsBkg = loadAni('assets/images/msprite_1.png', 9);
+	marsBkg.scale.x = width/1280;
+	marsBkg.scale.y = height/720;
+	marsBkg.noLoop();
+	marsBkg.stop();
 }
 
 
@@ -184,23 +164,10 @@ function draw() {
 	if (frameCount % 60 == 0) {
 		timeControl++;
 	}
-	
-	// if (state === 'launch' ||
-	// state === 'transition' && fadeTransition >= 1 ||
-	// state === 'failed' && fadeTransition >= 1 && launchFailled === true) {
-		launch.draw();
-	// }
-	// else if (state === 'travel' ||
-	// state === 'transition' && fadeTransition >= 1 && launchComplete === true ||
-	// state === 'complete' && fadeTransition >= 1 ||
-	// state === 'failed' && fadeTransition >= 1 && travelFailled === true) {
-	// 	travel.draw();
-	// }
-
 
 	
-	// transitions();
-	console.log(state);
+	transitions();
+	
 	
 }
 
@@ -222,18 +189,6 @@ function transitions() {
 		fadeTransition = 0;
 	}
 
-	if (state === 'title') {
-		titleScreen();
-	}
-	else if (state === 'launch') {
-		if (fadeTransition >= 1){
-			titleScreen();
-		}
-		fadeOn = false;
-		if (launchComplete === true) {
-			state = 'transition';
-		}
-	}
 	else if (state === 'transition') {
 		fadeOn = true;
 		push();
@@ -242,17 +197,7 @@ function transitions() {
 		text('Destination: mars',width/2,height/2);
 		pop();
 	}
-	else if (state === 'travel') {
-		fadeOn = false;
-		push();
-		fill(250, 101, 52,fadeTransition);
-		textSize(150);
-		text('Destination: mars',width/2,height/2);
-		pop();
-	}
-	else if (state === 'complete') {
-		fadeOn = true;
-	}
+
 	else if (state === 'failed') {
 		fadeOn = true;
 		push();
@@ -317,7 +262,7 @@ function transitions() {
 	
 	textFont(spaceFont);
 	if (marsBkg.frame > 5 && kb.presses('space')) {
-		state = 'launch';
+		location.href = "google.com";
 	}
 
   }
