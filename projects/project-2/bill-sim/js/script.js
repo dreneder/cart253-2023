@@ -149,7 +149,7 @@ function setup() {
 
 	textFont(spaceFont);
 	
-	marsBkg = loadAni('assets/images/msprite_1.png', 9);
+	marsBkg = loadAni('assets/images/msprite_1.png', 8);
 	marsBkg.scale.x = width/1280;
 	marsBkg.scale.y = height/720;
 	marsBkg.noLoop();
@@ -224,12 +224,12 @@ function transitions() {
 	textSize(200);
 	textAlign(CENTER,CENTER);
 	text('2024',width/2,height/3-200);
-	text('billionaire simulator',width/2,height/3);
+	// text('billionaire simulator',width/2,height/3);
 	textSize(80);
 	text('press space to begin',width/2,height/3*2);
 	
 	if (marsBkg.frame < 2 && kb.presses('space')) {
-			marsBkg.play();
+			// marsBkg.play();
 		}
 	titleFade = map(marsBkg.frame,1,8,255,0);
 
@@ -264,5 +264,5 @@ function transitions() {
 	if (marsBkg.frame > 5 && kb.presses('space')) {
 		location.href = "google.com";
 	}
-
   }
+  
