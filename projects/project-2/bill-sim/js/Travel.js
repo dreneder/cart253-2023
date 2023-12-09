@@ -41,13 +41,8 @@ class Travel {
     }
 
     draw() {
-<<<<<<< HEAD
-<<<<<<< HEAD
+
         // clear();
-=======
->>>>>>> parent of 94e25db (inserted states and broke the whole code 🙃)
-=======
->>>>>>> parent of 94e25db (inserted states and broke the whole code 🙃)
         background(0);
         starVelX = spaceShip.vel.x;
 	starVelY = spaceShip.vel.y;
@@ -130,8 +125,7 @@ class Travel {
 	travelUI.display();
 	
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 
     if (displaySpeed > 4000 && earth.collides(spaceShip)) {
         for (let i = 0; i < 200; i++) {
@@ -158,12 +152,7 @@ class Travel {
             spaceShip.scale = 0;
             travelComplete = true;
             location.href = "index-end.html";
-=======
-	
->>>>>>> parent of 94e25db (inserted states and broke the whole code 🙃)
-=======
-	
->>>>>>> parent of 94e25db (inserted states and broke the whole code 🙃)
     }
 
+}
 }

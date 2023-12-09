@@ -13,6 +13,11 @@
 "use strict";
 
 
+let state = `title`;
+
+// variable for time
+let timeControl = 0;
+
 // variables for sprites 
 let earth;
 let moon;
@@ -55,11 +60,12 @@ let starVelY = 0;
 // font for the game
 let spaceFont;
 
-//array for mission control sounds
+//variables and array to control sounds
 let missionSound = [];
+let booster;
+let travelIntel = false;
 
-let travel;
-
+let explosion;
 
 // ONLY LAUNCH VARIABLES BELOW
 
@@ -69,9 +75,6 @@ let launchShip;
 let stage2;
 let rocket;
 let base;
-
-
-let lifted = false;
 
 let rocketBoost;
 let stage2Boost;
@@ -93,6 +96,11 @@ let boost1;
 let boost2;
 let boost3;
 
+let boosterAlert = false;
+let stageAlert = false;
+let boosterEnabled = false;
+let stageEnabled = false;
+
 let dock1;
 let dock2;
 
@@ -101,18 +109,45 @@ let stage = 0; // variable to keep each action separate
 //for the countdown
 let countdown = 13;
 
+let launch;
+let travel;
+
+let launchFailled = false;
+let launchComplete = false;
+let travelFailled = false;
+let travelComplete = false;
+
+let marsBkg;
+
+let titleFade = 255;
+let instFade = 0;
+
+let fadeOn = true;
+let fadeTransition = 255;
+
 
 /**
  * loading fonts and sounds and images for the sprites
 */
 function preload() {
+	launchShipImg = loadImage('assets/images/starship.png');
+	stage2Img = loadImage('assets/images/stage2.png');
+	rocketImg = loadImage('assets/images/rocket.png');
+	baseImg = loadImage('assets/images/base.png');
+
+	earthImg = loadImage('assets/images/earth.png');
+	moonImg = loadImage('assets/images/moon.png');
+	marsImg = loadImage('assets/images/mars.png');
+	spaceShipImg = loadImage('assets/images/starship.png');
+	
 
 	spaceFont = loadFont('assets/fonts/BebasNeue-Regular.ttf');
 
-	for (let i = 0; i < 29; i++) {
-		let radioSound = loadSound(`assets/sounds/mission_${i}.wav`);
-	  missionSound.push(radioSound);
-	  }
+	// for (let i = 0; i < 31; i++) {
+	// 	let radioSound = loadSound(`assets/sounds/mission_${i}.wav`);
+	// 	missionSound.push(radioSound);
+	// }
+	// booster = loadSound(`assets/sounds/booster.wav`);
 }
 
 
@@ -131,22 +166,18 @@ function setup() {
 	// travel.setup();
 	
 	// launch class
-	launch = new Launch();
-	launch.setup();
+	// launch = new Launch();
+	// launch.setup();
 	
-	// marsBkg = loadAni('assets/images/msprite_1.png', 9);
-	// marsBkg.scale.x = width/1280;
-	// marsBkg.scale.y = height/720;
-	// marsBkg.noLoop();
-	// marsBkg.stop();
+	marsBkg = loadAni('assets/images/msprite_1.png', 9);
+	marsBkg.scale.x = width/1280;
+	marsBkg.scale.y = height/720;
+	marsBkg.noLoop();
+	marsBkg.stop();
 }
 
 
 function draw() {
-	// travel.draw();
-
-
-	clear();
 	background(0);
 	
 	//time can be relative, but here I need it counted to trigger some actions
@@ -157,7 +188,7 @@ function draw() {
 	// if (state === 'launch' ||
 	// state === 'transition' && fadeTransition >= 1 ||
 	// state === 'failed' && fadeTransition >= 1 && launchFailled === true) {
-		launch.draw();
+		// launch.draw();
 	// }
 	// else if (state === 'travel' ||
 	// state === 'transition' && fadeTransition >= 1 && launchComplete === true ||
@@ -168,71 +199,71 @@ function draw() {
 
 
 	
-	// transitions();
+	transitions();
 	console.log(state);
 	
 }
 
 function transitions() {
 	push();
-	tint(255,fadeTransition);
+	// tint(255,fadeTransition);
 
-	if (fadeOn === true) {
-		fadeTransition += 2;
-	}
-	else if (fadeOn === false) {
-		fadeTransition -= 2;
-	}
+	// if (fadeOn === true) {
+	// 	fadeTransition += 2;
+	// }
+	// else if (fadeOn === false) {
+	// 	fadeTransition -= 2;
+	// }
 
-	if (fadeTransition >= 255) {
-		fadeTransition = 255;
-	}
-	else if (fadeTransition <= 0) {
-		fadeTransition = 0;
-	}
+	// if (fadeTransition >= 255) {
+	// 	fadeTransition = 255;
+	// }
+	// else if (fadeTransition <= 0) {
+	// 	fadeTransition = 0;
+	// }
 
-	if (state === 'title') {
+	// if (state === 'title') {
 		titleScreen();
-	}
-	else if (state === 'launch') {
-		if (fadeTransition >= 1){
-			titleScreen();
-		}
-		fadeOn = false;
-		if (launchComplete === true) {
-			state = 'transition';
-		}
-	}
-	else if (state === 'transition') {
-		fadeOn = true;
-		push();
-		fill(250, 101, 52,fadeTransition);
-		textSize(150);
-		text('Destination: mars',width/2,height/2);
-		pop();
-	}
-	else if (state === 'travel') {
-		fadeOn = false;
-		push();
-		fill(250, 101, 52,fadeTransition);
-		textSize(150);
-		text('Destination: mars',width/2,height/2);
-		pop();
-	}
-	else if (state === 'complete') {
-		fadeOn = true;
-	}
-	else if (state === 'failed') {
-		fadeOn = true;
-		push();
-		fill(245, 37, 37,fadeTransition);
-		rect(width/2,height/2,width,height);
-		fill(0,fadeTransition);
-		textSize(150);
-		text('mission failed',width/2,height/2);
-		pop();
+	// }
+	// else if (state === 'launch') {
+	// 	if (fadeTransition >= 1){
+	// 		titleScreen();
+	// 	}
+	// 	fadeOn = false;
+	// 	if (launchComplete === true) {
+	// 		state = 'transition';
+	// 	}
+	// }
+	// else if (state === 'transition') {
+	// 	fadeOn = true;
+	// 	push();
+	// 	fill(250, 101, 52,fadeTransition);
+	// 	textSize(150);
+	// 	text('Destination: mars',width/2,height/2);
+	// 	pop();
+	// }
+	// else if (state === 'travel') {
+	// 	fadeOn = false;
+	// 	push();
+	// 	fill(250, 101, 52,fadeTransition);
+	// 	textSize(150);
+	// 	text('Destination: mars',width/2,height/2);
+	// 	pop();
+	// }
+	// else if (state === 'complete') {
+	// 	fadeOn = true;
+	// }
+	// else if (state === 'failed') {
+	// 	fadeOn = true;
+	// 	push();
+	// 	fill(245, 37, 37,fadeTransition);
+	// 	rect(width/2,height/2,width,height);
+	// 	fill(0,fadeTransition);
+	// 	textSize(150);
+	// 	text('mission failed',width/2,height/2);
+	// 	pop();
 
-	}
+	// }
 
 	pop();
 
@@ -286,7 +317,7 @@ function transitions() {
 	
 	textFont(spaceFont);
 	if (marsBkg.frame > 5 && kb.presses('space')) {
-		state = 'launch';
+		location.href = "https://www.google.com";
 	}
 
   }

@@ -173,7 +173,7 @@ function draw() {
 		timeControl++;
 	}
 	
-		travel.draw();
+		launch.draw();
 
 	
 }
