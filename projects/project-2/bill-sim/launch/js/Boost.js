@@ -23,7 +23,7 @@ boost1.life = () => random(20,60);
 drawRocket(x,y,rotation) {
   boost1.draw();
   if (kb.pressing('up') && stage === 1 && countdown <= 6) {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 10; i++) {
     new boost1.Sprite(random(x-15,x+15),y+120);
     }
   }

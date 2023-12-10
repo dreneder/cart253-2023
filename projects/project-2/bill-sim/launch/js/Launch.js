@@ -157,15 +157,15 @@ class Launch {
                 stage = 1;
                 missionSound[1].play();
             }
-            else if (stage === 1 && altitude > 70) {
+            else if (stage === 1 && altitude > 100) {
                 dock1.remove();
                 stage = 2;
                 missionSound[17].play();
-                if (frameCount % 120 == 0) {
+                if (frameCount % 60 == 0) {
                     boosterAlert = true;
                 }
             }
-            else if (stage === 2 && altitude > 130) {
+            else if (stage === 2 && altitude > 180) {
                 dock2.remove();
                 stage = 3;
                 missionSound[20].play();
@@ -173,23 +173,23 @@ class Launch {
                     boosterAlert = true;
                 }
             }
-            else if (stage === 3 && altitude > 200) {
+            else if (stage === 3 && altitude > 260) {
                 missionSound[23].play();
                 launchComplete = true;
-                location.href = "index-travel.html";
+               
             }
         }
         
         if (stage === 0) {
             stageAlert = true;
         }
-        else if (altitude >= 70 && stage === 1) {
+        else if (altitude >= 100 && stage === 1) {
             stageAlert = true;
         }
-        else if (altitude >= 130 && stage === 2) {
+        else if (altitude >= 180 && stage === 2) {
             stageAlert = true;
         }
-        else if (altitude >= 250 && stage === 3) {
+        else if (altitude >= 260 && stage === 3) {
             stageAlert = true;
         }
         else {
@@ -245,7 +245,7 @@ class Launch {
           if (kb.pressing('up')) {
             let xForce = cos(rocket.rotation-90) * 10000;
           let yForce = sin(rocket.rotation-90) * 10000;
-          rocket.bearing = -90;
+          // rocket.bearing = -90;
             rocket.applyForce(createVector(xForce, yForce))
             }
           }
@@ -259,7 +259,7 @@ class Launch {
           if (kb.pressing('up')) {
             let xForce = cos(stage2.rotation-90) * 10000;
           let yForce = sin(stage2.rotation-90) * 10000;
-          stage2.bearing = -90;
+          // stage2.bearing = -90;
             stage2.applyForce(createVector(xForce, yForce));
             }
           }
@@ -271,32 +271,28 @@ class Launch {
           launchShip.rotation += 0.2;
           }
           if (kb.pressing('up')) {
-            let xForce = cos(launchShip.rotation-90) * 1000;
-          let yForce = sin(launchShip.rotation-90) * 1000;
-          launchShip.bearing = -90;
+            let xForce = cos(launchShip.rotation-90) * 10000;
+          let yForce = sin(launchShip.rotation-90) * 10000;
+          // launchShip.bearing = -90;
             launchShip.applyForce(createVector(xForce, yForce));
             }
           }
         
       
         
-        alt = map(launchShip.y,1000,-50000,0,200);
+        alt = map(launchShip.y,300,-15000,0,200);
         altitude = round(alt);
     
         if (speed < 0 ) {
             speed = round(launchShip.vel.y*50);
-            if (speed > 300) {
-                
-            }	
         }
         else {
             speed = round(-launchShip.vel.y*50);		
         }
-        if (speed === 1200 && kb.pressing('up')) {
+        if (speed == 1200 && kb.pressing('up')) {
             missionSound[15].play();
         }
-    
-        // timer based on frame rate
+
         if (stage === 1 && frameCount % 60 == 0 && altitude < 5) {
           countdown--;
           if (countdown <= 10 && countdown >= 0) {
@@ -324,7 +320,7 @@ class Launch {
         textAlign(CENTER,CENTER);
         textSize(200);
         fill(0);
-        text(countdown,width/2,height/3);
+        text(countdown,width/5*4,height/3);
       }
     }
 

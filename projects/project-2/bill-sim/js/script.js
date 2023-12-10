@@ -184,92 +184,11 @@ function draw() {
 	if (frameCount % 60 == 0) {
 		timeControl++;
 	}
-	
-	// if (state === 'launch' ||
-	// state === 'transition' && fadeTransition >= 1 ||
-	// state === 'failed' && fadeTransition >= 1 && launchFailled === true) {
-		// launch.draw();
-	// }
-	// else if (state === 'travel' ||
-	// state === 'transition' && fadeTransition >= 1 && launchComplete === true ||
-	// state === 'complete' && fadeTransition >= 1 ||
-	// state === 'failed' && fadeTransition >= 1 && travelFailled === true) {
-	// 	travel.draw();
-	// }
 
-
-	
-	transitions();
-	console.log(state);
-	
+	titleScreen();
 }
 
-function transitions() {
-	push();
-	// tint(255,fadeTransition);
-
-	// if (fadeOn === true) {
-	// 	fadeTransition += 2;
-	// }
-	// else if (fadeOn === false) {
-	// 	fadeTransition -= 2;
-	// }
-
-	// if (fadeTransition >= 255) {
-	// 	fadeTransition = 255;
-	// }
-	// else if (fadeTransition <= 0) {
-	// 	fadeTransition = 0;
-	// }
-
-	// if (state === 'title') {
-		titleScreen();
-	// }
-	// else if (state === 'launch') {
-	// 	if (fadeTransition >= 1){
-	// 		titleScreen();
-	// 	}
-	// 	fadeOn = false;
-	// 	if (launchComplete === true) {
-	// 		state = 'transition';
-	// 	}
-	// }
-	// else if (state === 'transition') {
-	// 	fadeOn = true;
-	// 	push();
-	// 	fill(250, 101, 52,fadeTransition);
-	// 	textSize(150);
-	// 	text('Destination: mars',width/2,height/2);
-	// 	pop();
-	// }
-	// else if (state === 'travel') {
-	// 	fadeOn = false;
-	// 	push();
-	// 	fill(250, 101, 52,fadeTransition);
-	// 	textSize(150);
-	// 	text('Destination: mars',width/2,height/2);
-	// 	pop();
-	// }
-	// else if (state === 'complete') {
-	// 	fadeOn = true;
-	// }
-	// else if (state === 'failed') {
-	// 	fadeOn = true;
-	// 	push();
-	// 	fill(245, 37, 37,fadeTransition);
-	// 	rect(width/2,height/2,width,height);
-	// 	fill(0,fadeTransition);
-	// 	textSize(150);
-	// 	text('mission failed',width/2,height/2);
-	// 	pop();
-
-	// }
-
-	pop();
-
-  }
-
-  function titleScreen() {
+function titleScreen() {
 	rectMode(CENTER);
 	
 	animation(marsBkg,width/2,height/2);
@@ -317,7 +236,7 @@ function transitions() {
 	
 	textFont(spaceFont);
 	if (marsBkg.frame > 5 && kb.presses('space')) {
-		location.href = "https://www.google.com";
+		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/bill-sim/launch/index.html";
 	}
 
   }

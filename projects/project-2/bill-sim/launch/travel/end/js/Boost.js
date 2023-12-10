@@ -22,7 +22,7 @@ boost1.life = () => random(20,60);
 // goes in the draw function
 drawRocket(x,y,rotation) {
   boost1.draw();
-  if (kb.pressing('up') && stage === 1 && countdown <= 6) {
+  if (kb.pressing('up')) {
   for (let i = 0; i < 20; i++) {
     new boost1.Sprite(random(x-15,x+15),y+120);
     }
@@ -44,7 +44,7 @@ boost2.life = () => random(5,20);
 // goes in the draw function
 drawStage2(x,y,rotation) {
   boost2.draw();
-  if (kb.pressing('up') && stage === 2) {
+  if (kb.pressing('up')) {
     new boost2.Sprite(random(x-5,x+5),y+45);
   }
 }
@@ -64,7 +64,7 @@ boost3.life = () => random(1,2);
 // goes in the draw function
 drawShip(x,y,rotation) {
   boost3.draw();
-  if (kb.pressing('up') && stage === 3) {
+  if (kb.pressing('up')) {
     new boost3.Sprite(random(x-2,x+2),y+80);  
   }
 }

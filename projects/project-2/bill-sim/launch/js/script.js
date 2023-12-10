@@ -13,8 +13,6 @@
 "use strict";
 
 
-let state = `title`;
-
 // variable for time
 let timeControl = 0;
 
@@ -123,7 +121,7 @@ let titleFade = 255;
 let instFade = 0;
 
 let fadeOn = true;
-let fadeTransition = 255;
+let fadeTransition = 0;
 
 
 /**
@@ -175,5 +173,52 @@ function draw() {
 	
 		launch.draw();
 
+		if (launchComplete === true && fadeTransition >= 255) {
+			location.href = "travel/index.html";
+		  }
+	transition();
+
+	console.log(fadeTransition);
 	
+}
+
+function transition(){
+
+
+
+
+if (fadeOn === true) {
+	fadeTransition += 2;
+}
+else if (fadeOn === false) {
+	fadeTransition -= 2;
+}
+
+if (fadeTransition >= 255) {
+	fadeTransition = 255;
+}
+else if (fadeTransition <= 0) {
+	fadeTransition = 0;
+}
+
+if (launchComplete === true) {
+	fadeOn = true;
+	fill(0,fadeTransition);
+	rectMode(CENTER);
+	rect(width/2,height/2,width,height);
+	fill(250, 101, 52,fadeTransition);
+	textSize(150);
+	text('Destination: mars',width/2,height/2);
+	
+}
+else if (launchFailled === true) {
+	fadeOn = true;
+	rectMode(CENTER);
+	fill(245, 37, 37,fadeTransition);
+	rect(width/2,height/2,width,height);
+	fill(0,fadeTransition);
+	textSize(150);
+	text('mission failed',width/2,height/2);
+	
+}
 }

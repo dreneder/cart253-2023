@@ -1,9 +1,12 @@
 class Travel {
 
     setup() {
-         
+        for (let i = 0; i < 2000; i++) {
+            stars.push(new Star());
+          }
     
-        allSprites.autoCull = false;
+    
+          allSprites.autoCull = false;
           
     
         spaceShip = new Sprite(-500,-500);
@@ -35,30 +38,14 @@ class Travel {
         travelUI.x = width/2;
         travelUI.y = height+160;
         travelUI = new UI(travelUI.x,travelUI.y);
-        
-        camera.zoom = 6;
-
-
-    
-    
-	
-	explosion = new Group();
-	explosion.collider = 'dynamic';
-    explosion.stroke = color(0,0);
-    explosion.color = color(250, 128, 52,100);
-	explosion.direction = () => random(0, 360);
-	explosion.speed = () => random(1, 5);
-	explosion.d = 6;
-	
-
-
     }
 
     draw() {
+
         // clear();
         background(0);
         starVelX = spaceShip.vel.x;
-	    starVelY = spaceShip.vel.y;
+	starVelY = spaceShip.vel.y;
 
 	for (const star of stars) {
 		star.display();
@@ -66,19 +53,7 @@ class Travel {
 
 	camera.on();
 
-	
-      if (travelIntel === false && kb.presses('right') || kb.presses('left')) {
-        camera.zoomTo(1);
-        missionSound[24].play();
-        travelIntel = true;
-        timeControl = 0;
-        if (timeControl === 3) {
-            missionSound[25].play();
-        }
-    }
-
-        console.log(travelIntel);
-      
+	camera.zoom = 6;
 	 camera.x = spaceShip.x;
 	camera.y = spaceShip.y;
 
@@ -115,11 +90,17 @@ class Travel {
 
 	spaceShip.attractTo(earth,map(distEarth,500,3000,500,0,true));
 	spaceShip.attractTo(moon,map(distMars,250,1000,250,0,true));
-	spaceShip.attractTo(mars,map(distMars,500,3000,800,0,true));
+	spaceShip.attractTo(mars,map(distMars,500,3000,500,0,true));
 	
 
 	moon.attractTo(earth,500);
 
+	
+	moon.debug = mouse.pressing();
+	
+	
+	
+	
 	
 	
 	camera.off();
@@ -142,7 +123,8 @@ class Travel {
 		}
 	}
 	travelUI.display();
-    
+	
+
 
 
     if (displaySpeed > 4000 && earth.collides(spaceShip)) {
