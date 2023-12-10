@@ -236,7 +236,7 @@ function titleScreen() {
 	
 	textFont(spaceFont);
 	if (marsBkg.frame > 5 && kb.presses('space')) {
-		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/bill-sim/launch/index.html";
+		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/bill-sim/launch";
 	}
 
   }
