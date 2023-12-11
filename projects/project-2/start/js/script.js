@@ -112,6 +112,6 @@ function draw() {
 	textFont(spaceFont);
 	// opens the page of the next phase
 	if (marsBkg.frame > 5 && kb.presses('space')) {
-		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/bill-sim/launch";
+		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/launch";
 	}
   }
