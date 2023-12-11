@@ -137,7 +137,7 @@ display() {
 	triangle(15,-20,15,20,45,0);
 	pop();
   
-  // warning messages
+  // drawing warning messages
   if (warningDistance === true || warningFuel === true || warningSpeed === true) {
     fill(255,0,0);
     rect(0,-190,500,80)

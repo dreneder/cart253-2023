@@ -6,14 +6,13 @@
  * rich people that take part in it. The game is divided in two parts: the launch and the interplanetary
  * travel to Mars. The code makes a huge use of the p5play library by Quinton Ashley, so all of the
  * objects have been written as sprites, so the camera object could work properly.
- * I based my code on a gravity prototype from Miachel Ruppe: https://github.com/michaelruppe/art/tree/master/solar-system-p5
+ * Initially the codewas based on gravity prototypes by Miachel Ruppe: https://github.com/michaelruppe/art/tree/master/solar-system-p5
+ * and Bruno M.: https://github.com/Bruno-M-/gravity
+ * Finaly they were all adapted to the mechanics built in p5play.
  * 
  */
 
 "use strict";
-
-
-let state = `title`;
 
 // variable for time
 let timeControl = 0;
@@ -65,83 +64,43 @@ let missionSound = [];
 let booster;
 let travelIntel = false;
 
+//variable for explosion
 let explosion;
 
-// ONLY LAUNCH VARIABLES BELOW
-
-//variables for sprites
-let ground;
-let launchShip;
-let stage2;
-let rocket;
-let base;
-
-let rocketBoost;
-let stage2Boost;
-let shipBoost;
-
-
-let launchShipImg;
-let stage2Img;
-let rocketImg;
-let baseImg;
-
-
+//speed of the ship
 let speed = 0;
 
-let altitude = 0;
-let alt = 0;
-
-let boost1;
-let boost2;
-let boost3;
-
-let boosterAlert = false;
-let stageAlert = false;
-let boosterEnabled = false;
-let stageEnabled = false;
-
-let dock1;
-let dock2;
-
-let stage = 0; // variable to keep each action separate
-
 //for the countdown
-let countdown = 13;
-
-let launch;
 let travel;
 
-let launchFailled = false;
-let launchComplete = false;
+// for game endings
 let travelFailled = false;
 let travelComplete = false;
 
-let marsBkg;
-
-let titleFade = 255;
-let instFade = 0;
-
-let fadeOn = true;
-let fadeTransition = 255;
-
+//for voice commands
 let approachMars = false;
 let decreaseSpeed = false;
 
+//for transitions
+let titleFade = 255;
+let instFade = 0;
+let fadeOn = true;
+let fadeTransition = 255;
 
 /**
  * loading fonts and sounds and images for the sprites
 */
 function preload() {
-
+	//images
 	earthImg = loadImage('assets/images/earth.png');
 	moonImg = loadImage('assets/images/moon.png');
 	marsImg = loadImage('assets/images/mars.png');
 	spaceShipImg = loadImage('assets/images/starship.png');
 	
-
+	//font
 	spaceFont = loadFont('assets/fonts/BebasNeue-Regular.ttf');
 
+	//sounds
 	for (let i = 0; i < 31; i++) {
 		let radioSound = loadSound(`assets/sounds/mission_${i}.wav`);
 		missionSound.push(radioSound);
@@ -155,18 +114,21 @@ function preload() {
 */
 function setup() {
 	createCanvas(windowWidth,windowHeight);
+	//calls the stars
 	for (let i = 0; i < 2000; i++) {
 		stars.push(new Star());
 	}
+	//declares font for global use
 	textFont(spaceFont);
 
 	// travel class
 	travel = new Travel();
 	travel.setup();
-
 }
 
-
+/**
+ * calling methods and transition function
+*/
 function draw() {
 	background(0);
 
@@ -174,40 +136,35 @@ function draw() {
 	if (frameCount % 1 == 0) {
 		timeControl++;
 	}
-
-
-	
+	//draws travel
 	travel.draw();
+
+	//endings
 	if (travelComplete === true && fadeTransition === 255) {
-		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/end";
+		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/end"; //goes to end screen
 	  }
 	if (travelFailled === true && fadeTransition === 255 && kb.presses('space')) {
-		location.reload();
+		location.reload(); //reloads the level if failed
 	  }
+	  // calls the transition
 	transition();
-
-	
 }
 
 function transition(){
-
-
-
-
+//fade control
 if (fadeOn === true) {
 	fadeTransition += 2;
 }
 else if (fadeOn === false) {
 	fadeTransition -= 2;
 }
-
 if (fadeTransition >= 255) {
 	fadeTransition = 255;
 }
 else if (fadeTransition <= 0) {
 	fadeTransition = 0;
 }
-
+//draws the initial text
 if (travelFailled === false && travelComplete === false && travelIntel === false) {
 	if (kb.presses('space')) {
 		fadeOn = false;
@@ -225,6 +182,7 @@ if (travelFailled === false && travelComplete === false && travelIntel === false
 	pop();
 }
 
+//draws the endgame text
 if (travelComplete === true) {
 	push();
 	fadeOn = true;
@@ -237,6 +195,7 @@ if (travelComplete === true) {
 	text('mars touchdown',width/2,height/2);
 	pop();
 }
+//draws the "game over" text
 else if (travelFailled === true) {
 	push();
 	fadeOn = true;

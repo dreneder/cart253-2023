@@ -1,9 +1,11 @@
 class Launch {
 
+  //method to be called in the setup function
     setup() {
+        //declaring p5play attraction force
         world.gravity.y = 10;
   
-        //for the boost class
+        //calling a different the boost class for each stage
         rocketBoost = new Boost();
         rocketBoost.setRocket();
         stage2Boost = new Boost();
@@ -11,49 +13,50 @@ class Launch {
         shipBoost = new Boost();
         shipBoost.setShip();
       
+        //draws sprites
         ground = new Sprite(width/2,height-75,width*4,150,'static');
         base = new Sprite(width/2+150,height-420,'none');
         stage2 = new Sprite(width/2,height-384);
         launchShip = new Sprite(width/2,height-505);
         rocket = new Sprite(width/2,height-225);
         
+        //color, image and scale attributes for images
         ground.color = '#00bd3f';
-        
         launchShip.img = launchShipImg;
         stage2.img = stage2Img;
         rocket.img = rocketImg;
         base.img = baseImg;
-        
         rocket.scale = 0.2;
         launchShip.scale = 0.2;
         stage2.scale = 0.2;
         base.scale = 0.2;
         
+        //joints for the rocket stages
         dock1 = new GlueJoint(rocket,stage2);
         dock2 = new GlueJoint(stage2,launchShip);
     }
 
+    //method to be called in the draw function
     draw() {
-        // clear();
-
-        
+        //set the stars with no speed and draws them
         starVelX = 0;
         starVelY = 0;
-    
         for (const star of stars) {
             star.display();
           }
-    
+        
+        //rectangle covering the background, fades depending on altitude reavealing starry sky
         fill(183,226,247,map(altitude,50,80,255,0,true));
         rect(0,0,width,height);
         
+        //all bellow this is affected by the camera
         camera.on();
         
-        
+        // changes camera zoom depending on the stage
           if (stage === 1) {
             camera.x = stage2.x;
             camera.zoomTo(1);
-            if (stage2.y <= height/2) {
+            if (stage2.y <= height/2) {//camera follows rocket if it goes over the middle of the canvas
               camera.y = stage2.y;
             }
           }
@@ -72,10 +75,12 @@ class Launch {
                 }
         }
         
+        //gorund sprite follows the ship x position
         if (camera.y < 0-width/2) {
           ground.x = launchShip.x;
         }
       
+        //draws the sprites in order
         ground.draw();
         base.draw();
         stage2Boost.drawStage2(stage2.x,stage2.y,stage2.rotation);
@@ -85,20 +90,21 @@ class Launch {
         rocket.draw();
         launchShip.draw();
       
-      
+        //makes the stage joints invisible
         dock1.visible = false;
         dock2.visible = false;
         
-            
+        //all bellow this are unaffected by the camera
         camera.off();
-    
-    
+        
+        //UI elements
+        // variables for activating the stage and boost calls
         let alertColor = color(250, 52, 52,150);
         let enableColor = color(52, 250, 82, 150);
-    
         let boosterColor;
         let stageColor;
     
+        //conditionals to call stages and boosts
         if (boosterEnabled === true) {
             boosterColor = enableColor;
         }
@@ -108,7 +114,6 @@ class Launch {
         else {
             boosterColor = color(20, 190, 247, 150);
         }
-    
         if (stageEnabled === true) {
             stageColor = enableColor;
         }
@@ -119,15 +124,12 @@ class Launch {
             stageColor = color(20, 190, 247, 150);
         }
         
-        
+        //drawing the UI
         stroke(255, 150);
         fill(boosterColor);
         rect(-50,405,350,100, 20);
         fill(stageColor);
         rect(-50,505,350,100, 20);
-    
-    
-    
         fill(20, 190, 247, 150);
         rect(-50,100,350,300, 20);
         noStroke();
@@ -144,33 +146,28 @@ class Launch {
         textSize(50);
         text(altitude,140,170);
         text(speed,140,320);
-        
         textSize(80);
         text('BOOSTER',150,445);
         text('STAGE',150,545);
         
-
+        //UI intructions that hide when the user advances
         if (stage === 0) {
           fill(255,0,0,150);
           textSize(35);
           text('activate when RED',420,500);
         }
 
-  
-        
-        
-        
-    
+        //input control for the stages
         if (kb.presses('spacebar')) {
             if (stage === 0) {
                 stage = 1;
-                missionSound[1].play();
+                missionSound[1].play(); //each plays a stage separation audio
             }
-            else if (stage === 1 && altitude > 100) {
+            else if (stage === 1 && altitude > 100) { //activates according to altitude
                 dock1.remove();
                 stage = 2;
                 missionSound[17].play();
-                if (frameCount % 60 == 0) {
+                if (frameCount % 60 == 0) {//had to adjust to framecount to avoid a bug of the speed
                     boosterAlert = true;
                 }
             }
@@ -184,11 +181,11 @@ class Launch {
             }
             else if (stage === 3 && altitude > 260) {
                 missionSound[23].play();
-                launchComplete = true;
-               
+                launchComplete = true;//level completed once it reaches the stage/altitude 
             }
         }
         
+        //activates the stage alerts according to altitude
         if (stage === 0) {
             stageAlert = true;
         }
@@ -205,12 +202,12 @@ class Launch {
             stageAlert = false;
         }
     
+        //checks orbit sound at 205 kilometers
         if (stage === 3 && altitude === 205) {
             missionSound[22].play();
         }
         
-    
-    
+        //changes the alert color once user responds with input
         if (kb.pressing('spacebar')) {
             stageEnabled = true;
         }
@@ -233,17 +230,16 @@ class Launch {
             booster.stop();
             missionSound[16].play();		
         }
-        
-        
-        //for control of the vehicle
+      
+        //inputs for control of the vehicle according to stages
         if (stage === 1 && countdown <= 0) {
-          if (kb.pressing('left')) {
+          if (kb.pressing('left')) { //rotation
           rocket.rotation -= 0.1;
           }
           else if (kb.pressing('right')) {
           rocket.rotation += 0.1;
           }
-          if (kb.pressing('up')) {
+          if (kb.pressing('up')) { //boost
             let xForce = cos(rocket.rotation-90) * 10000;
           let yForce = sin(rocket.rotation-90) * 10000;
             rocket.applyForce(createVector(xForce, yForce))
@@ -263,7 +259,7 @@ class Launch {
             }
           }
         else if (stage === 3) {
-          if (kb.pressing('left')) {
+          if (kb.pressing('left')) { // rotation changes only for last stage
           launchShip.rotation -= 0.2;
           }
           else if (kb.pressing('right')) {
@@ -276,50 +272,50 @@ class Launch {
             }
           }
         
-      
-        
+        //mapping altitude to y position and rounding it for display
         alt = map(launchShip.y,300,-15000,0,200);
         altitude = round(alt);
         
+        //calculating the speed for display
         speed = round(-launchShip.vel.y*50);		
         if (speed < 0 ) {
             speed = round(launchShip.vel.y*50);
         }
 
+        //fails the mission if the negative speed is too high after a certain altitude
         if (launchShip.vel.y*50 > 200 && altitude > 5) {
-          missionSound[29].play();
+          missionSound[29].play();//plays the fail sound
           launchFailled = true;
         }
-        
-        
 
-        console.log(launchShip.vel.y);
-
-
+        //countdown which variable starts at 13, is controlled by frame count
         if (stage === 1 && frameCount % 60 == 0 && altitude < 5) {
-          countdown--;
+          countdown--;//lowers the count
           if (countdown <= 10 && countdown >= 0) {
               missionSound[-countdown+12].play(); //plays the sounds of the countdown
               
+              //plays liftoff and claps sound when countdown reaches 0
               if (countdown === 0 && kb.pressing('up')) {
                   missionSound[14].play();
                   missionSound[30].play();
                   missionSound[30].amp(0.1);
                 }
             }
+            //if the vehicle doesn't take off the mission fails
             if (countdown === -10 && altitude < 5) {
                 missionSound[29].play();
                 launchFailled = true;
             }
         }
+        //booster engaged sound
         if (countdown <= 6 && kb.presses('up') && stage === 1) {
             missionSound[13].play();
           }
           if (countdown <= 6) {
             boosterAlert = true;
           }
+          //draws the countdown when between 10 and 0
         if (countdown <= 10 && countdown >= 0) {
-        //writes the countdown
         textFont(spaceFont);
         textAlign(CENTER,CENTER);
         textSize(200);
@@ -327,7 +323,4 @@ class Launch {
         text(countdown,width/5*4,height/3);
       }
     }
-
-    
-
 }
