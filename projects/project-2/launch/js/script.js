@@ -94,7 +94,6 @@ function preload() {
 	stage2Img = loadImage('assets/images/stage2.png');
 	rocketImg = loadImage('assets/images/rocket.png');
 	baseImg = loadImage('assets/images/base.png');
-	spaceShipImg = loadImage('assets/images/starship.png');
 	//font
 	spaceFont = loadFont('assets/fonts/BebasNeue-Regular.ttf');
 	//sounds
