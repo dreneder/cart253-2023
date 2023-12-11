@@ -143,11 +143,6 @@ function preload() {
 
 	spaceFont = loadFont('assets/fonts/BebasNeue-Regular.ttf');
 
-	// for (let i = 0; i < 31; i++) {
-	// 	let radioSound = loadSound(`assets/sounds/mission_${i}.wav`);
-	// 	missionSound.push(radioSound);
-	// }
-	// booster = loadSound(`assets/sounds/booster.wav`);
 }
 
 
@@ -169,11 +164,11 @@ function setup() {
 	// launch = new Launch();
 	// launch.setup();
 	
-	marsBkg = loadAni('assets/images/msprite_1.png', 9);
+	marsBkg = loadAni('assets/images/endsprite_1.png', 18);
 	marsBkg.scale.x = width/1280;
 	marsBkg.scale.y = height/720;
 	marsBkg.noLoop();
-	marsBkg.stop();
+	
 }
 
 
@@ -184,12 +179,6 @@ function draw() {
 	if (frameCount % 60 == 0) {
 		timeControl++;
 	}
-
-	titleScreen();
-}
-
-function titleScreen() {
-	rectMode(CENTER);
 	
 	animation(marsBkg,width/2,height/2);
 	
@@ -197,46 +186,16 @@ function titleScreen() {
 	noStroke();
 	textSize(200);
 	textAlign(CENTER,CENTER);
-	text('2024',width/2,height/3-200);
-	text('billionaire simulator',width/2,height/3);
+	text('mission complete',width/2,height/2);
 	textSize(80);
-	text('press space to begin',width/2,height/3*2);
+	text('press space to play again',width/2,height/3*2);
 	
-	if (marsBkg.frame < 2 && kb.presses('space')) {
-			marsBkg.play();
-		}
-	titleFade = map(marsBkg.frame,1,8,255,0);
+	
+	titleFade = map(marsBkg.frame,3,10,0,255);
 
-	if (titleFade === 0) {
-		instFade += 10;
-	}
-	
-	stroke(255,instFade);
-	strokeWeight(10);
-	fill(255,0);
-	rect(width/2,height/2+300,900,150);
-	rect(width/2,height/2,200,200);
-	rect(width/2,height/2-300,200,200);
-	rect(width/2-300,height/2,200,200);
-	rect(width/2+300,height/2,200,200);
-	
-	
-	fill(255,instFade);
-	strokeWeight(0);
-	textSize(80);
-	text('controls',width/2,height/2-500);
-	text('next stage',width/2,height/2+290);
-	strokeWeight(8);
-	textFont('roboto');
-	text('↑',width/2,height/2-300);
-	text('↓',width/2,height/2);
-	strokeWeight(4);
-	text('↺',width/2-300,height/2);
-	text('↻',width/2+300,height/2);
-	
-	textFont(spaceFont);
-	if (marsBkg.frame > 5 && kb.presses('space')) {
-		location.href = "launch/index.html";
+
+	if (marsBkg.frame > 10 && kb.presses('space')) {
+		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/start";
 	}
 
   }

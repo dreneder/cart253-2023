@@ -125,6 +125,9 @@ let instFade = 0;
 let fadeOn = true;
 let fadeTransition = 255;
 
+let approachMars = false;
+let decreaseSpeed = false;
+
 
 /**
  * loading fonts and sounds and images for the sprites
@@ -166,9 +169,87 @@ function setup() {
 
 function draw() {
 	background(0);
-	
-		travel.draw();
+
+	//time can be relative, but here I need it counted to trigger some actions
+	if (frameCount % 1 == 0) {
+		timeControl++;
 	}
+
+
+	
+	travel.draw();
+	if (travelComplete === true && fadeTransition === 255) {
+		location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/end";
+	  }
+	if (travelFailled === true && fadeTransition === 255 && kb.presses('space')) {
+		location.reload();
+	  }
+	transition();
+
+	
+}
+
+function transition(){
+
+
+
+
+if (fadeOn === true) {
+	fadeTransition += 2;
+}
+else if (fadeOn === false) {
+	fadeTransition -= 2;
+}
+
+if (fadeTransition >= 255) {
+	fadeTransition = 255;
+}
+else if (fadeTransition <= 0) {
+	fadeTransition = 0;
+}
+
+if (travelFailled === false && travelComplete === false && travelIntel === false) {
+	if (kb.presses('space')) {
+		fadeOn = false;
+	}
+	push();
+	fill(0,fadeTransition);
+	rectMode(CENTER);
+	rect(width/2,height/2,width,height);
+	fill(250, 101, 52,fadeTransition);
+	textAlign(CENTER,CENTER);	
+	textSize(150);
+	text('Destination: mars',width/2,height/2);
+	textSize(60);
+	text('press space to continue',width/2,height/2+100);
+	pop();
+}
+
+if (travelComplete === true) {
+	push();
+	fadeOn = true;
+	fill(0,fadeTransition);
+	rectMode(CENTER);
+	rect(width/2,height/2,width,height);
+	fill(250, 101, 52,fadeTransition);
+	textAlign(CENTER,CENTER);
+	textSize(150);
+	text('mars touchdown',width/2,height/2);
+	pop();
+}
+else if (travelFailled === true) {
+	push();
+	fadeOn = true;
+	rectMode(CENTER);
+	fill(245, 37, 37,fadeTransition);
+	rect(width/2,height/2,width,height);
+	fill(0,fadeTransition);
+	textAlign(CENTER,CENTER);
+	textSize(150);
+	text('mission failed',width/2,height/2);
+	pop();
+}
+}
 	
 
 

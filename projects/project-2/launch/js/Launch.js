@@ -118,7 +118,8 @@ class Launch {
         else {
             stageColor = color(20, 190, 247, 150);
         }
-    
+        
+        
         stroke(255, 150);
         fill(boosterColor);
         rect(-50,405,350,100, 20);
@@ -148,6 +149,14 @@ class Launch {
         text('BOOSTER',150,445);
         text('STAGE',150,545);
         
+
+        if (stage === 0) {
+          fill(255,0,0,150);
+          textSize(35);
+          text('activate when RED',420,500);
+        }
+
+  
         
         
         
@@ -220,19 +229,11 @@ class Launch {
             booster.loop();
             booster.amp(0.035);
         }
-        else if (kb.released('up') && stage === 1 && altitude > 5) {
+        else if (kb.released('up') && altitude > 5) {
             booster.stop();
             missionSound[16].play();		
         }
-        if (kb.presses('up') && stage === 2) {
-            booster.loop();
-            booster.amp(0.02);
-            missionSound[18].play();		
-        }
-        else if (kb.released('up') && stage === 2) {
-            booster.stop();
-            missionSound[19].play();		
-        }
+        
         
         //for control of the vehicle
         if (stage === 1 && countdown <= 0) {
@@ -245,7 +246,6 @@ class Launch {
           if (kb.pressing('up')) {
             let xForce = cos(rocket.rotation-90) * 10000;
           let yForce = sin(rocket.rotation-90) * 10000;
-          // rocket.bearing = -90;
             rocket.applyForce(createVector(xForce, yForce))
             }
           }
@@ -259,7 +259,6 @@ class Launch {
           if (kb.pressing('up')) {
             let xForce = cos(stage2.rotation-90) * 10000;
           let yForce = sin(stage2.rotation-90) * 10000;
-          // stage2.bearing = -90;
             stage2.applyForce(createVector(xForce, yForce));
             }
           }
@@ -273,7 +272,6 @@ class Launch {
           if (kb.pressing('up')) {
             let xForce = cos(launchShip.rotation-90) * 10000;
           let yForce = sin(launchShip.rotation-90) * 10000;
-          // launchShip.bearing = -90;
             launchShip.applyForce(createVector(xForce, yForce));
             }
           }
@@ -282,16 +280,21 @@ class Launch {
         
         alt = map(launchShip.y,300,-15000,0,200);
         altitude = round(alt);
-    
+        
+        speed = round(-launchShip.vel.y*50);		
         if (speed < 0 ) {
             speed = round(launchShip.vel.y*50);
         }
-        else {
-            speed = round(-launchShip.vel.y*50);		
+
+        if (launchShip.vel.y*50 > 200 && altitude > 5) {
+          missionSound[29].play();
+          launchFailled = true;
         }
-        if (speed == 1200 && kb.pressing('up')) {
-            missionSound[15].play();
-        }
+        
+        
+
+        console.log(launchShip.vel.y);
+
 
         if (stage === 1 && frameCount % 60 == 0 && altitude < 5) {
           countdown--;
@@ -306,6 +309,7 @@ class Launch {
             }
             if (countdown === -10 && altitude < 5) {
                 missionSound[29].play();
+                launchFailled = true;
             }
         }
         if (countdown <= 6 && kb.presses('up') && stage === 1) {

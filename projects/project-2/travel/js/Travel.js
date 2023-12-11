@@ -66,18 +66,20 @@ class Travel {
 
 	camera.on();
 
-	
-      if (travelIntel === false && kb.presses('right') || kb.presses('left')) {
+	console.log(timeControl);
+      if (travelIntel === false && kb.presses('right') || travelIntel === false && kb.presses('left')) {
         camera.zoomTo(1);
-        missionSound[24].play();
         travelIntel = true;
         timeControl = 0;
-        if (timeControl === 3) {
-            missionSound[25].play();
-        }
+    }
+    if (timeControl === 2 && travelIntel === true) {
+        missionSound[24].play();
+    }
+    if (timeControl === 180 && travelIntel === true) {
+        missionSound[25].play();
     }
 
-        console.log(travelIntel);
+
       
 	 camera.x = spaceShip.x;
 	camera.y = spaceShip.y;
@@ -101,11 +103,6 @@ class Travel {
 	let xForce = cos(spaceShip.rotation+90) * 500;
     let yForce = sin(spaceShip.rotation+90) * 500;
     spaceShip.applyForce(createVector(xForce, yForce));
-	}
-
-	if (kb.pressed('space')) {
-		spaceShip.vel.x = 0;
-		spaceShip.vel.y = 0;
 	}
 
 	distEarth = dist(spaceShip.x,spaceShip.y,earth.x,earth.y);
@@ -150,6 +147,7 @@ class Travel {
             new explosion.Sprite(spaceShip.x,spaceShip.y);  
             spaceShip.scale = 0;
             travelFailled = true;
+            missionSound[29].play();
         }
     }
     if (displaySpeed > 4000 && moon.collides(spaceShip)) {
@@ -158,18 +156,15 @@ class Travel {
         }
         spaceShip.scale = 0;
         travelFailled = true;
+        missionSound[29].play();
     }
     if (displaySpeed > 10000 && mars.collides(spaceShip)) {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 10; i++) {
             new explosion.Sprite(spaceShip.x,spaceShip.y);  
         }
         spaceShip.scale = 0;
         travelFailled = true;
-    }
-    if (displaySpeed > 100 && mars.collides(spaceShip)) {
-            spaceShip.scale = 0;
-            travelComplete = true;
-            location.href = "index-end.html";
+        missionSound[29].play();
     }
 
 }

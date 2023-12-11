@@ -13,6 +13,37 @@ display() {
 	shipSpeed = sqrt(sq(spaceShip.vel.x)+sq(spaceShip.vel.y));
 	displaySpeed = round(map(shipSpeed,0,1,0,10000));
 	
+	// warning for high speed
+	if (displaySpeed > 250000) {
+		warningSpeed = true;
+	}
+	else if (displaySpeed < 250000) {
+		warningSpeed = false;
+	}
+	// warning for fuel
+	if (fuel < 65) {
+		warningFuel = true;
+	}
+	// fail for low fuel
+	if (fuel < 50) {
+		travelFailled = true;
+	}
+	
+	// warning for high distance 
+	if (spaceShip.x < -3000 || spaceShip.x > 60000 ||
+		spaceShip.y < -40000 || spaceShip.y > 3000 ) {
+		warningDistance = true;
+	}
+	else {
+		warningDistance = false;
+	}
+	// fail for distance 
+	if (spaceShip.x < -4500 || spaceShip.x > 65000 ||
+		spaceShip.y < -48000 || spaceShip.y > 4500 ) {
+			travelFailled = true;
+		}
+		
+	
 	// calculates the angle of each space body from the ship's position
 	earthAngle = atan2(earth.y/2-spaceShip.y/2,earth.x/2-spaceShip.x/2);
 	moonAngle = atan2(moon.y/2-spaceShip.y/2,moon.x/2-spaceShip.x/2);
@@ -35,9 +66,24 @@ display() {
 	let toMoon = round(distMoon-moon.d/1.92);
 	let toMars = round(distMars-mars.d/1.92);
 
-	noStroke();
+	// camera zooms when close to mars
+	if (toMars < 200) {
+		camera.zoomTo(4.5);
+	}
 
+	//tells the player to engage boosters
+	if (toMars < 23000 && decreaseSpeed === false) {
+		decreaseSpeed = true;
+		missionSound[26].play();
+	}
+	//tells the player Mars is getting close
+	if (toMars < 4000 && approachMars === false) {
+		approachMars = true;
+		missionSound[27].play();
+	}
+	
 	// displays fuel level and speed
+	noStroke();
 	textAlign(CENTER,CENTER);
 	fill(255);
 	textFont(spaceFont);
@@ -108,6 +154,10 @@ display() {
     }
   }
 	pop();
+	//for completion of the game
+	if (displaySpeed < 600 && mars.colliding(spaceShip) && travelFailled === false) {
+		travelComplete = true;
+		missionSound[28].play();
 }
-
+}
 }

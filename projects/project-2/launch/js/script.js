@@ -120,7 +120,7 @@ let marsBkg;
 let titleFade = 255;
 let instFade = 0;
 
-let fadeOn = true;
+let fadeOn = false;
 let fadeTransition = 0;
 
 
@@ -173,12 +173,14 @@ function draw() {
 	
 		launch.draw();
 
-		if (launchComplete === true && fadeTransition >= 255) {
+		if (launchComplete === true && fadeTransition === 255) {
 			location.href = "https://dreneder.github.io/cart253-2023/projects/project-2/travel";
+		  }
+		if (launchFailled === true && fadeTransition === 255 && kb.presses('space')) {
+			location.reload();
 		  }
 	transition();
 
-	console.log(fadeTransition);
 	
 }
 
@@ -202,6 +204,7 @@ else if (fadeTransition <= 0) {
 }
 
 if (launchComplete === true) {
+	push();
 	fadeOn = true;
 	fill(0,fadeTransition);
 	rectMode(CENTER);
@@ -209,9 +212,10 @@ if (launchComplete === true) {
 	fill(250, 101, 52,fadeTransition);
 	textSize(150);
 	text('Destination: mars',width/2,height/2);
-	
+	pop();
 }
 else if (launchFailled === true) {
+	push();
 	fadeOn = true;
 	rectMode(CENTER);
 	fill(245, 37, 37,fadeTransition);
@@ -219,6 +223,6 @@ else if (launchFailled === true) {
 	fill(0,fadeTransition);
 	textSize(150);
 	text('mission failed',width/2,height/2);
-	
+	pop();
 }
 }
